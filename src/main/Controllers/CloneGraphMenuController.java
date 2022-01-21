@@ -1,20 +1,10 @@
 package main.Controllers;
 
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
 import javafx.fxml.Initializable;
 import javafx.scene.web.WebView;
-import org.jsoup.Jsoup;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.ResourceBundle;
 
 public class CloneGraphMenuController implements Initializable {

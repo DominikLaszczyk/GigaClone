@@ -67,8 +67,11 @@ public class FileController implements Initializable {
 
         //store selected root directory as File
         chosenDirectory = directoryChooser.showDialog(stage);
-        directoryChosenLabel.setTextFill(Color.GREEN);
-        directoryChosenLabel.setText(Strings.CHOSEN_DIRECTORY + chosenDirectory.getName());
+        if(chosenDirectory != null) {
+            directoryChosenLabel.setTextFill(Color.GREEN);
+            directoryChosenLabel.setText(Strings.CHOSEN_DIRECTORY + chosenDirectory.getName());
+        }
+
     }
 
     public void chooseLanguage() {
