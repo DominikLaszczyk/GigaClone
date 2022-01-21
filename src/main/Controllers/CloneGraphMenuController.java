@@ -23,9 +23,7 @@ public class CloneGraphMenuController implements Initializable {
     private WebView cloneWebView;
 
     public void showGraph(){
-        System.out.println(numOfGraphs);
         loadRadialTree();
-
     }
 
     @Override
