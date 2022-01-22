@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 public class CloneGraphMenuController implements Initializable {
 
     private int numOfGraphs;
-    private WebView cloneWebView;
+    private WebView cloneGraphWebView;
 
     public void showGraph(){
         loadRadialTree();
@@ -19,15 +19,15 @@ public class CloneGraphMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         numOfGraphs = CloneVisController.getNumOfGraphs();
-        cloneWebView = CloneVisController.getCloneWebView();
+        cloneGraphWebView = CloneVisController.getCloneGraphWebView();
 
         //loadRadialTree();
         URL temp = this.getClass().getResource("../CloneGraphs/CloneGraph.html");
-        cloneWebView.getEngine().load(temp.toString());
+        cloneGraphWebView.getEngine().load(temp.toString());
     }
 
     private void loadRadialTree() {
-        cloneWebView.getEngine().executeScript("printRadialTree()");
+        cloneGraphWebView.getEngine().executeScript("printRadialTree()");
     }
 
 }

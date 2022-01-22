@@ -35,7 +35,6 @@
             <CheckBox mnemonicParsing="false" text="CheckBox" />
             <CheckBox mnemonicParsing="false" text="CheckBox" />
             <CheckBox mnemonicParsing="false" text="CheckBox" />
-            <CheckBox mnemonicParsing="false" text="CheckBox" />
          </children>
       </FlowPane>
       <Slider GridPane.rowIndex="3">
