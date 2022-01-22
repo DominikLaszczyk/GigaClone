@@ -3,20 +3,15 @@ package main.Controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class CloneVisController implements Initializable {
-
     private static int numOfGraphs = 0;
     private static WebView cloneGraphWebView;
 
@@ -24,7 +19,6 @@ public class CloneVisController implements Initializable {
     private SplitPane cloneVisSplitPane;
     private GridPane singleCloneGraphGridPane;
     private GridPane multipleCloneGraphsGridPane;
-
 
     private WebView firstCloneGraphWebView;
     private GridPane firstCloneGraphMenuGridPane;
@@ -75,12 +69,6 @@ public class CloneVisController implements Initializable {
 
             //setting width of every column to be the same
             distributeCloneGraphWidth(multipleCloneGraphsGridPane, numOfGraphs);
-//            multipleCloneGraphsGridPane.getColumnConstraints().clear();
-//            for(int i=0; i<numOfGraphs; i++) {
-//                ColumnConstraints col = new ColumnConstraints();
-//                col.setPercentWidth(100.0/numOfGraphs);
-//                multipleCloneGraphsGridPane.getColumnConstraints().add(col);
-//            }
 
             //adding new web view to the first row of new column
             multipleCloneGraphsGridPane.add(cloneGraphWebView, numOfGraphs-1, 0);
@@ -116,10 +104,6 @@ public class CloneVisController implements Initializable {
         numOfGraphs--;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-    }
-
     private static void setupSingleCloneGraphGridPane(GridPane clonePane) {
         clonePane.getRowConstraints().clear();
         clonePane.getColumnConstraints().clear();
@@ -145,8 +129,8 @@ public class CloneVisController implements Initializable {
         RowConstraints row2 = new RowConstraints();
         ColumnConstraints col1 = new ColumnConstraints();
 
-        row1.setPercentHeight(80.0); //15% height for clone graph
-        row2.setPercentHeight(20.0); //15% height for clone menu
+        row1.setPercentHeight(80.0); //80% height for clone graph
+        row2.setPercentHeight(20.0); //20% height for clone menu
 
         clonePane.getRowConstraints().addAll(row1, row2);
         clonePane.getColumnConstraints().add(col1);
@@ -167,5 +151,9 @@ public class CloneVisController implements Initializable {
 
     public static WebView getCloneGraphWebView() {
         return cloneGraphWebView;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 }
