@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 public class CloneVisController implements Initializable {
 
-    private static int numOfGraphs = 1;
+    private static int numOfGraphs = 0;
     private static WebView cloneGraphWebView;
 
     @FXML
@@ -30,7 +30,7 @@ public class CloneVisController implements Initializable {
     private GridPane firstCloneGraphMenuGridPane;
 
     public void addGraph() throws IOException {
-
+        numOfGraphs++;
         //creating a web view for displaying clone graphs
         cloneGraphWebView = new WebView();
         GridPane.setVgrow(cloneGraphWebView, Priority.ALWAYS);
@@ -74,23 +74,46 @@ public class CloneVisController implements Initializable {
             }
 
             //setting width of every column to be the same
-            multipleCloneGraphsGridPane.getColumnConstraints().clear();
-            for(int i=0; i<numOfGraphs; i++) {
-                ColumnConstraints col = new ColumnConstraints();
-                col.setPercentWidth(100.0/numOfGraphs);
-                multipleCloneGraphsGridPane.getColumnConstraints().add(col);
-            }
+            distributeCloneGraphWidth(multipleCloneGraphsGridPane, numOfGraphs);
+//            multipleCloneGraphsGridPane.getColumnConstraints().clear();
+//            for(int i=0; i<numOfGraphs; i++) {
+//                ColumnConstraints col = new ColumnConstraints();
+//                col.setPercentWidth(100.0/numOfGraphs);
+//                multipleCloneGraphsGridPane.getColumnConstraints().add(col);
+//            }
 
             //adding new web view to the first row of new column
             multipleCloneGraphsGridPane.add(cloneGraphWebView, numOfGraphs-1, 0);
             multipleCloneGraphsGridPane.add(cloneGraphMenuGridPane, numOfGraphs-1, 1);
         }
-
-        numOfGraphs++;
     }
 
     public void removeGraph() {
+        if(numOfGraphs == 1) {
+            //remove single clone graph grid pane
+            cloneVisSplitPane.getItems().remove(1);
+        }
+        else if(numOfGraphs == 2) {
+            //remove multiple graphs grid pane
+            cloneVisSplitPane.getItems().remove(1);
 
+            //setup single graph grid pane
+            setupSingleCloneGraphGridPane(singleCloneGraphGridPane);
+
+            //add the first clone graph and graph menu to first row
+            singleCloneGraphGridPane.add(firstCloneGraphWebView, 1, 0);
+            singleCloneGraphGridPane.add(firstCloneGraphMenuGridPane, 0, 0);
+
+            //add single graph grid pane
+            cloneVisSplitPane.getItems().add(singleCloneGraphGridPane);
+        }
+        else {
+            //remove last graph grid pane
+            multipleCloneGraphsGridPane.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == numOfGraphs-1);
+            distributeCloneGraphWidth(multipleCloneGraphsGridPane,numOfGraphs-1);
+        }
+
+        numOfGraphs--;
     }
 
     @Override
@@ -98,6 +121,9 @@ public class CloneVisController implements Initializable {
     }
 
     private static void setupSingleCloneGraphGridPane(GridPane clonePane) {
+        clonePane.getRowConstraints().clear();
+        clonePane.getColumnConstraints().clear();
+
         //1 row, 2 cols
         RowConstraints row1 = new RowConstraints();
         ColumnConstraints col1 = new ColumnConstraints();
@@ -111,6 +137,9 @@ public class CloneVisController implements Initializable {
     }
 
     private static void setupMultipleCloneGraphsGridPane(GridPane clonePane) {
+        clonePane.getRowConstraints().clear();
+        clonePane.getColumnConstraints().clear();
+
         //2 rows, 1 col
         RowConstraints row1 = new RowConstraints();
         RowConstraints row2 = new RowConstraints();
@@ -121,6 +150,15 @@ public class CloneVisController implements Initializable {
 
         clonePane.getRowConstraints().addAll(row1, row2);
         clonePane.getColumnConstraints().add(col1);
+    }
+
+    private static void distributeCloneGraphWidth(GridPane clonePane, int numOfCells) {
+        clonePane.getColumnConstraints().clear();
+        for(int i=0; i<numOfCells; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPercentWidth(100.0/numOfCells);
+            clonePane.getColumnConstraints().add(col);
+        }
     }
 
     public static int getNumOfGraphs() {
