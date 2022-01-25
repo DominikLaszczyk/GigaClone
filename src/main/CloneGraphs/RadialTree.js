@@ -1,4 +1,7 @@
 function printRadialTree() {
+    const cloneGraph = document.getElementById("chart");
+    cloneGraph.textContent = '';
+
     const width = 750,
         height = 750,
         radius = width / 2;
