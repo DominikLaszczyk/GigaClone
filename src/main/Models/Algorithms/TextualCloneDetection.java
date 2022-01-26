@@ -1,11 +1,17 @@
 package main.Models.Algorithms;
 
+import javafx.collections.ObservableList;
 import main.Models.CloneDetection;
+import main.Models.FileExtended;
+
+import java.util.ArrayList;
 
 public class TextualCloneDetection extends CloneDetection {
 
-    TextualCloneDetection() {
+    ObservableList<FileExtended> files;
 
+    public TextualCloneDetection(ObservableList<FileExtended> files) {
+        this.files = files;
     }
 
     @Override

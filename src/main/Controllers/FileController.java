@@ -2,6 +2,7 @@ package main.Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -46,6 +47,10 @@ public class FileController implements Initializable {
     private CheckBox allIncludedCheckBox;
     @FXML
     private Label directoryChosenLabel;
+    @FXML
+    private ProgressBar processFilesProgressBar;
+    @FXML
+    private Button killProceedTaskButton;
 
     //table view for choosing files
     @FXML
@@ -58,6 +63,8 @@ public class FileController implements Initializable {
     private TableColumn<FileExtended, String> locColumn;
     @FXML
     private TableColumn<FileExtended, String> filePathColumn;
+
+    Task<Void> extractMethodsTask;
 
     public void chooseDirectory() {
         //create new window for choosing the project root directory
@@ -111,15 +118,39 @@ public class FileController implements Initializable {
 
         //if(selectedTableFiles.size() >= 2) {
         if(true) {
-            fileModel.setFinalFileList(selectedTableFiles);
-            for(FileExtended file : fileModel.getFinalFileList()) {
-                file.extractMethods(file);
-            }
-            Main.switchToCloneVis();
+            extractMethodsTask = new Task<>() {
+                @Override
+                public Void call() throws Exception {
+                    double iterator = 0.0;
+                    fileModel.setFinalFileList(selectedTableFiles);
+                    ObservableList<FileExtended> files = fileModel.getFinalFileList();
+                    for(FileExtended file : files) {
+                        if(isCancelled()) {
+                            updateProgress(0.0, 100.0);
+                            break;
+                        }
+                        file.extractMethods(file);
+                        iterator++;
+                        updateProgress((iterator/files.size())*100.0, 100.0);
+                    }
+                    return null ;
+                }
+            };
+
+            extractMethodsTask.setOnSucceeded(event -> {
+                Main.switchToCloneVis();
+            });
+
+            processFilesProgressBar.progressProperty().bind(extractMethodsTask.progressProperty());
+            new Thread(extractMethodsTask).start();
         }
         else {
             Alerts.getNoFilesIncludedAlert().showAndWait();
         }
+    }
+
+    public void killProceedTask() {
+        extractMethodsTask.cancel();
     }
 
     public static FileModel getFileModel() {
@@ -138,6 +169,7 @@ public class FileController implements Initializable {
         chooseLangComboBox.setItems(languages);
 
         //set up the table view for files
+        filesTableView.setPlaceholder(new Label("No files match the current query."));
         includeColumn.setCellValueFactory(new PropertyValueFactory<>("included"));
         fileNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         locColumn.setCellValueFactory(new PropertyValueFactory<>("loc"));

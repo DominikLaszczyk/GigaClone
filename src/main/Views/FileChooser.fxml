@@ -125,11 +125,16 @@
                <bottom>
                   <HBox alignment="CENTER" prefHeight="36.0" prefWidth="955.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ProgressBar prefHeight="18.0" prefWidth="800.0" progress="0.0">
+                        <ProgressBar fx:id="processFilesProgressBar" prefHeight="18.0" prefWidth="738.0" progress="0.0">
                            <HBox.margin>
                               <Insets bottom="3.0" left="10.0" right="10.0" />
                            </HBox.margin>
                         </ProgressBar>
+                        <Button fx:id="killProceedTaskButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#killProceedTask" prefHeight="29.0" text="Kill Task">
+                           <HBox.margin>
+                              <Insets bottom="4.0" right="10.0" />
+                           </HBox.margin>
+                        </Button>
                         <Button fx:id="proceedButton" minWidth="-Infinity" mnemonicParsing="false" onAction="#proceed" prefHeight="29.0" prefWidth="103.0" text="Proceed">
                            <font>
                               <Font name="System Bold" size="14.0" />

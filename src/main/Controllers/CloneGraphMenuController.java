@@ -10,8 +10,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import main.Models.Alerts;
+import main.Models.Algorithms.TextualCloneDetection;
 import main.Models.CloneDetection;
 import main.Models.CloneGraph;
+import main.Models.FileExtended;
 import main.resources.Strings;
 
 import java.net.URL;
@@ -49,12 +51,13 @@ public class CloneGraphMenuController implements Initializable {
     public void detectClones() {
         //get selected clone detection algorithm
         CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
+        ObservableList<FileExtended> files = FileController.getFileModel().getFinalFileList();
 
         if(cloneDetectionAlgorithm == null) {
             Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
         }
         else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
-
+            TextualCloneDetection textCloneDetection = new TextualCloneDetection(files);
         }
         else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
 

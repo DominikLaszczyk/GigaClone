@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
+import main.Main;
 import main.Models.FileExtended;
 
 import java.io.IOException;
@@ -147,6 +148,10 @@ public class CloneVisController implements Initializable {
             col.setPercentWidth(100.0/numOfCells);
             clonePane.getColumnConstraints().add(col);
         }
+    }
+
+    public void goBack() {
+        Main.switchToFileChooser();
     }
 
     public static int getNumOfGraphs() {
