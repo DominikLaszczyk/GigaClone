@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 public class FileController implements Initializable {
 
-    FileModel fileModel = new FileModel();
+    private static FileModel fileModel = new FileModel();
     File chosenDirectory;
     String chosenLanguage;
     ObservableList<FileExtended> tableFiles = FXCollections.observableArrayList();
@@ -102,19 +102,28 @@ public class FileController implements Initializable {
         }
     }
 
-    public void proceed() {
+    public void proceed() throws IOException {
         //filter only the selected files from the table view
         ObservableList<FileExtended> selectedTableFiles =
                 FXCollections.observableList(tableFiles.stream().filter(file ->
                         file.getIncluded().isSelected()).collect(Collectors.toList())
                 );
 
-        if(selectedTableFiles.size() >= 2) {
+        //if(selectedTableFiles.size() >= 2) {
+        if(true) {
+            fileModel.setFinalFileList(selectedTableFiles);
+            for(FileExtended file : fileModel.getFinalFileList()) {
+                file.extractMethods(file);
+            }
             Main.switchToCloneVis();
         }
         else {
             Alerts.getNoFilesIncludedAlert().showAndWait();
         }
+    }
+
+    public static FileModel getFileModel() {
+        return fileModel;
     }
 
     @Override

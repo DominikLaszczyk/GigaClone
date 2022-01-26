@@ -1,11 +1,14 @@
 package main.Controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.*;
 import javafx.scene.web.WebView;
+import main.Models.FileExtended;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +34,7 @@ public class CloneVisController implements Initializable {
 
         //load graph options
         GridPane cloneGraphMenuGridPane = FXMLLoader.load(getClass().getResource("../Views/CloneGraphMenu.fxml"));
+        GridPane.setVgrow(cloneGraphMenuGridPane, Priority.SOMETIMES);
 
         if(numOfGraphs == 1) {
             //save first clone graph and clone menu

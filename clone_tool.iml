@@ -8,6 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="lib" level="project" />
-    <orderEntry type="library" name="jsoup-1.14.3" level="project" />
+    <orderEntry type="library" name="antlr-4.9.3-complete" level="project" />
+    <orderEntry type="library" name="guava-31.0.1-jre" level="project" />
   </component>
 </module>

@@ -35,7 +35,7 @@ public class CloneGraph {
         }
     }
 
-    private static String indexPage;
+    private static String indexPage = "../CloneGraphs/index.html";
 
     public static String getIndexPage() {
         return indexPage;

@@ -5,9 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import main.Models.Alerts;
+import main.Models.CloneDetection;
 import main.Models.CloneGraph;
 import main.resources.Strings;
 
@@ -24,16 +27,40 @@ public class CloneGraphMenuController implements Initializable {
 
     @FXML
     private ComboBox<CloneGraph.Type> cloneGraphTypeComboBox = new ComboBox<>();
+    @FXML
+    private ComboBox<CloneDetection.Algorithm> cloneDetectionAlgorithmComboBox = new ComboBox<>();
+    @FXML
+    private Button detectClonesButton;
+
 
     public void showGraph(){
-        if(cloneGraphTypeComboBox.getValue() == CloneGraph.Type.RADIALTREE) {
+        CloneGraph.Type cloneGraphType = cloneGraphTypeComboBox.getValue();
+        if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
             loadRadialTree();
         }
-        else if(cloneGraphTypeComboBox.getValue() == CloneGraph.Type.HEB) {
+        else if(cloneGraphType == CloneGraph.Type.HEB) {
             loadHEB();
         }
-        else if(cloneGraphTypeComboBox.getValue() == CloneGraph.Type.SCATTER) {
+        else if(cloneGraphType == CloneGraph.Type.SCATTER) {
             loadScatter();
+        }
+    }
+
+    public void detectClones() {
+        //get selected clone detection algorithm
+        CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
+
+        if(cloneDetectionAlgorithm == null) {
+            Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
+        }
+        else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
+
+        }
+        else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
+
+        }
+        else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.AST) {
+
         }
     }
 
@@ -49,7 +76,7 @@ public class CloneGraphMenuController implements Initializable {
         });
 
         //load html to webview
-        URL url = this.getClass().getResource("../CloneGraphs/index.html");
+        URL url = this.getClass().getResource(CloneGraph.getIndexPage());
         engine.load(url.toString());
     }
 
@@ -67,12 +94,14 @@ public class CloneGraphMenuController implements Initializable {
         WebView cloneGraphWebView = CloneVisController.getCloneGraphWebView();
         engine = cloneGraphWebView.getEngine();
 
+        //initialize clone detection algorithm types in combobox
+        ObservableList<CloneDetection.Algorithm> cloneDetectionAlgorithms = FXCollections.observableArrayList();
+        cloneDetectionAlgorithms.addAll(CloneDetection.Algorithm.values());
+        cloneDetectionAlgorithmComboBox.setItems(cloneDetectionAlgorithms);
+
         //initialize clone graph types in combobox
         ObservableList<CloneGraph.Type> cloneGraphTypes = FXCollections.observableArrayList();
-        System.out.println(CloneGraph.Type.RADIALTREE.getName());
-        cloneGraphTypes.add(CloneGraph.Type.RADIALTREE);
-        cloneGraphTypes.add(CloneGraph.Type.HEB);
-        cloneGraphTypes.add(CloneGraph.Type.SCATTER);
+        cloneGraphTypes.addAll(CloneGraph.Type.values());
         cloneGraphTypeComboBox.setItems(cloneGraphTypes);
     }
 }

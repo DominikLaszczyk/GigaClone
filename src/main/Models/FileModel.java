@@ -1,5 +1,7 @@
 package main.Models;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import main.resources.Strings;
 
@@ -9,11 +11,11 @@ import java.util.ArrayList;
 
 public class FileModel {
     private ArrayList<FileExtended> fileList = new ArrayList<>();
+    private ObservableList<FileExtended> finalFileList = FXCollections.observableArrayList();
+
 
     //fill fileList with files based on given directory and language
     public Boolean loadFiles(File rootDirectory, String language, Boolean allIncluded) throws IOException {
-
-
         TreeItem<File> treeRoot = new TreeItem<>(rootDirectory);
         File[] children = rootDirectory.listFiles();
 
@@ -46,5 +48,13 @@ public class FileModel {
 
     public void setFileList(ArrayList<FileExtended> fileList) {
         this.fileList = fileList;
+    }
+
+    public void setFinalFileList(ObservableList<FileExtended> finalFileList) {
+        this.finalFileList = finalFileList;
+    }
+
+    public ObservableList<FileExtended> getFinalFileList() {
+        return this.finalFileList;
     }
 }

@@ -11,12 +11,14 @@ public class Strings {
 
 
     //---------------------------ALERTS----------------------------//
-    public static final String NO_DIR_OR_LANG_CHOSEN_CONTENT_TEXT = "Please choose a Directory and a Language";
-    public static final String NO_DIR_OR_LANG_CHOSEN_HEADER_TEXT = "The Directory or Language not selected";
+    public static final String NO_DIR_OR_LANG_CHOSEN_HEADER_TEXT = "The Directory or Language not selected!";
+    public static final String NO_DIR_OR_LANG_CHOSEN_CONTENT_TEXT = "Please choose a Directory and a Language.";
 
-    public static final String NO_FILES_INCLUDED_CONTENT_TEXT = "Please include at least two files";
-    public static final String NO_FILES_INCLUDED_HEADER_TEXT = "No files selected";
+    public static final String NO_FILES_INCLUDED_HEADER_TEXT = "No files selected!";
+    public static final String NO_FILES_INCLUDED_CONTENT_TEXT = "Please include at least two files.";
 
+    public static final String NO_CLONE_DETECTION_ALGORITHM_SELECTED_HEADER_TEXT = "No Algorithm selected!";
+    public static final String NO_CLONE_DETECTION_ALGORITHM_SELECTED_CONTENT_TEXT = "Please select a Clone Detection Algorithm.";
 
 
 }

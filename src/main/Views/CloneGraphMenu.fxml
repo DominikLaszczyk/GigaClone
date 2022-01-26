@@ -10,40 +10,47 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane gridLinesVisible="true" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="240.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controllers.CloneGraphMenuController">
+<GridPane gridLinesVisible="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="240.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controllers.CloneGraphMenuController">
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <ComboBox fx:id="cloneGraphTypeComboBox" prefHeight="25.0" prefWidth="177.0" promptText="Select Clone Graph Type" />
-      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="1">
+      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
          <children>
-            <CheckBox mnemonicParsing="false" text="CheckBox" />
-            <CheckBox mnemonicParsing="false" text="CheckBox" />
-            <CheckBox mnemonicParsing="false" text="CheckBox" />
+            <ComboBox fx:id="cloneDetectionAlgorithmComboBox" minWidth="10.0" prefHeight="25.0" prefWidth="138.0" promptText="Clone Detection Algorithm" />
+            <Button fx:id="detectClonesButton" mnemonicParsing="false" onAction="#detectClones" text="Detect Clones" />
+            <Button fx:id="killTaskButton" mnemonicParsing="false" text="Kill task" />
          </children>
       </FlowPane>
+      <ComboBox fx:id="cloneGraphTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="Clone Graph Type" GridPane.rowIndex="1" />
       <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2">
+         <children>
+            <CheckBox mnemonicParsing="false" text="Display names" />
+            <CheckBox mnemonicParsing="false" text="Hide nodes without clones" />
+         </children>
+      </FlowPane>
+      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="3">
          <children>
             <CheckBox mnemonicParsing="false" text="Type 1" />
             <CheckBox mnemonicParsing="false" text="Type 2" />
             <CheckBox mnemonicParsing="false" text="Type 3" />
          </children>
       </FlowPane>
-      <Slider majorTickUnit="10.0" min="5.0" showTickLabels="true" GridPane.rowIndex="3">
+      <Slider majorTickUnit="10.0" min="5.0" showTickLabels="true" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets right="15.0" />
          </GridPane.margin>
          <padding>
             <Insets left="15.0" />
          </padding></Slider>
-      <Button fx:id="showGraphButton" mnemonicParsing="false" onAction="#showGraph" text="Show Clone Graph" GridPane.rowIndex="4" />
+      <Button fx:id="showGraphButton" mnemonicParsing="false" onAction="#showGraph" text="Show Clone Graph" GridPane.rowIndex="5" />
    </children>
 </GridPane>

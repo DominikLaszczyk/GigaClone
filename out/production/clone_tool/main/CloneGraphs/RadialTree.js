@@ -36,7 +36,16 @@ function printRadialTree() {
                 .linkRadial()
                 .angle((d) => d.x)
                 .radius((d) => d.y)
-        );
+        )
+        .on('mouseover', function(d) {
+            d3.select(this).style("stroke", "blue");
+            d3.select(this).style("stroke-width", 7.0);
+
+        })
+        .on('mouseout', function(d) {
+            d3.select(this).style("stroke", "black");
+            d3.select(this).style("stroke-width", 1.0);
+        });
 
     svg
         .append('g')
