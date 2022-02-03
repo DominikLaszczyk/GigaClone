@@ -89,13 +89,8 @@ public class FileController implements Initializable {
         if(chosenDirectory != null && chosenLanguage != null) {
             fileModel.getFileList().clear();
 
-            System.out.println(chosenLanguage);
-
             //get all the files in the chosen directory, that were written in the chosen language
             Boolean filesExist = fileModel.loadFiles(chosenDirectory, chosenLanguage, allIncludedCheckBox.isSelected());
-
-            System.out.println(filesExist);
-            System.out.println(fileModel.getFileList());
 
             //load files to table view
             if (filesExist) {

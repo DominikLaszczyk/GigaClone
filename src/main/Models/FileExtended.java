@@ -8,7 +8,7 @@ import main.ANTLR.Java.Java8ParserBaseListener;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class FileExtended extends File{
     private final long loc;
     private String path;
     private CheckBox included;
-    private ArrayList<String> methods = new ArrayList<>();
+    private ArrayList<Method> methods = new ArrayList<>();
 
     public FileExtended(File file, Boolean included) throws IOException {
         super(file.getPath());
@@ -45,17 +45,17 @@ public class FileExtended extends File{
         Java8Parser parser = new Java8Parser(commonTokenStream);
         Java8Parser.CompilationUnitContext tree = parser.compilationUnit(); // parse a compilationUnit
 
-        MyListener extractor = new MyListener(parser);
+        JavaListener extractor = new JavaListener();
         ParseTreeWalker.DEFAULT.walk(extractor, tree);
 
         this.methods = extractor.methods;
     }
 
-    static class MyListener extends Java8ParserBaseListener {
+    static class JavaListener extends Java8ParserBaseListener {
 
-        private final ArrayList<String> methods = new ArrayList<>();
+        private final ArrayList<Method> methods = new ArrayList<>();
 
-        public MyListener(Java8Parser parser) {
+        public JavaListener() {
             super();
         }
 
@@ -64,8 +64,7 @@ public class FileExtended extends File{
             super.enterMethodDeclaration(ctx);
 
             if(ctx.start != null) {
-                String method = ctx.getText();
-                this.methods.add(method);
+                this.methods.add(new Method(ctx));
             }
         }
     }
@@ -76,6 +75,14 @@ public class FileExtended extends File{
 
     public CheckBox getIncluded() {
         return this.included;
+    }
+
+    public ArrayList<Method> getMethods() {
+        return this.methods;
+    }
+
+    private void test() {
+        System.out.println("test");
     }
 
 }

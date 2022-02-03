@@ -58,6 +58,7 @@ public class CloneGraphMenuController implements Initializable {
         }
         else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
             TextualCloneDetection textCloneDetection = new TextualCloneDetection(files);
+            textCloneDetection.detectClones();
         }
         else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
 
