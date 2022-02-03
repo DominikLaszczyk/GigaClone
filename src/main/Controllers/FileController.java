@@ -17,6 +17,7 @@ import main.Main;
 import main.Models.Alerts;
 import main.Models.FileExtended;
 import main.Models.FileModel;
+import main.Models.Language;
 import main.resources.Strings;
 
 import java.awt.event.ActionEvent;
@@ -34,7 +35,7 @@ public class FileController implements Initializable {
 
     private static FileModel fileModel = new FileModel();
     File chosenDirectory;
-    String chosenLanguage;
+    Language chosenLanguage;
     ObservableList<FileExtended> tableFiles = FXCollections.observableArrayList();
 
     @FXML
@@ -42,15 +43,13 @@ public class FileController implements Initializable {
     @FXML
     private SplitPane fileChooserSplitPane;
     @FXML
-    private ComboBox<String> chooseLangComboBox;
+    private ComboBox<Language> chooseLangComboBox;
     @FXML
     private CheckBox allIncludedCheckBox;
     @FXML
     private Label directoryChosenLabel;
     @FXML
     private ProgressBar processFilesProgressBar;
-    @FXML
-    private Button killProceedTaskButton;
 
     //table view for choosing files
     @FXML
@@ -90,8 +89,13 @@ public class FileController implements Initializable {
         if(chosenDirectory != null && chosenLanguage != null) {
             fileModel.getFileList().clear();
 
+            System.out.println(chosenLanguage);
+
             //get all the files in the chosen directory, that were written in the chosen language
             Boolean filesExist = fileModel.loadFiles(chosenDirectory, chosenLanguage, allIncludedCheckBox.isSelected());
+
+            System.out.println(filesExist);
+            System.out.println(fileModel.getFileList());
 
             //load files to table view
             if (filesExist) {
@@ -164,8 +168,11 @@ public class FileController implements Initializable {
         fileOptionsBorderPane.minWidthProperty().bind(fileChooserSplitPane.widthProperty().multiply(0.1));
 
         //initialise the languages combo box
-        ArrayList<String> languagesAL = new ArrayList<>(Strings.LANGUAGES_WITH_EXT.keySet());
-        ObservableList<String> languages = FXCollections.observableArrayList(languagesAL);
+
+        //ArrayList<String> languagesAL = new ArrayList<>(Strings.LANGUAGES_WITH_EXT.keySet());
+//        ArrayList<String> languagesAL = new ArrayList<>(Language.getNames());
+//        ObservableList<String> languages = FXCollections.observableArrayList(languagesAL);
+        ObservableList<Language> languages = FXCollections.observableArrayList(Language.values());
         chooseLangComboBox.setItems(languages);
 
         //set up the table view for files

@@ -15,7 +15,7 @@ public class FileModel {
 
 
     //fill fileList with files based on given directory and language
-    public Boolean loadFiles(File rootDirectory, String language, Boolean allIncluded) throws IOException {
+    public Boolean loadFiles(File rootDirectory, Language language, Boolean allIncluded) throws IOException {
         TreeItem<File> treeRoot = new TreeItem<>(rootDirectory);
         File[] children = rootDirectory.listFiles();
 
@@ -30,9 +30,9 @@ public class FileModel {
                 if(child.isDirectory()) {
                     loadFiles(child, language, allIncluded);
                 }
-                else {
-                    String fileExt = fileName.substring(fileName.lastIndexOf(".")+1);
-                    if(Strings.LANGUAGES_WITH_EXT.get(language).equals(fileExt)) {
+                else if (fileName.contains(".")){
+                    String fileExt = fileName.substring(fileName.lastIndexOf("."));
+                    if(language.getExtension().equals(fileExt)) {
                         fileList.add(new FileExtended(child, allIncluded));
                     }
                 }

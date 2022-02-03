@@ -7,7 +7,6 @@ public class Strings {
     public static final String PROGRAM_NAME = "GigaClone";
     public static final String DIRECTORY_CHOOSER_NAME = "Choose a directory";
     public static final String CHOSEN_DIRECTORY = "Chosen Directory: ";
-    public static final Map<String, String> LANGUAGES_WITH_EXT = Map.of("Java","java","Python","py","C++","cpp");
 
 
     //---------------------------ALERTS----------------------------//
