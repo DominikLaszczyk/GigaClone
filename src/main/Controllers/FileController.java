@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class FileController implements Initializable {
 
     private static FileModel fileModel = new FileModel();
-    File chosenDirectory;
+    static File chosenDirectory;
     Language chosenLanguage;
     ObservableList<FileExtended> tableFiles = FXCollections.observableArrayList();
 
@@ -115,8 +115,7 @@ public class FileController implements Initializable {
                         file.getIncluded().isSelected()).collect(Collectors.toList())
                 );
 
-        //if(selectedTableFiles.size() >= 2) {
-        if(true) {
+        if(selectedTableFiles.size() >= 2) {
             extractMethodsTask = new Task<>() {
                 @Override
                 public Void call() throws Exception {
@@ -154,6 +153,10 @@ public class FileController implements Initializable {
 
     public static FileModel getFileModel() {
         return fileModel;
+    }
+
+    public static File getChosenDirectory() {
+        return chosenDirectory;
     }
 
     @Override

@@ -36,6 +36,7 @@ public class FileExtended extends File{
         this.included.setSelected(included);
     }
 
+
     public void extractMethods(FileExtended file) throws IOException {
         String content = com.google.common.io.Files.asCharSource(file, StandardCharsets.ISO_8859_1).read();
         CharStream charStream = CharStreams.fromString(content);
@@ -45,7 +46,7 @@ public class FileExtended extends File{
         Java8Parser parser = new Java8Parser(commonTokenStream);
         Java8Parser.CompilationUnitContext tree = parser.compilationUnit(); // parse a compilationUnit
 
-        JavaListener extractor = new JavaListener();
+        JavaListener extractor = new JavaListener(file);
         ParseTreeWalker.DEFAULT.walk(extractor, tree);
 
         this.methods = extractor.methods;
@@ -54,9 +55,12 @@ public class FileExtended extends File{
     static class JavaListener extends Java8ParserBaseListener {
 
         private final ArrayList<Method> methods = new ArrayList<>();
+        private final FileExtended file;
 
-        public JavaListener() {
+        public JavaListener(FileExtended file ) {
             super();
+
+            this.file = file;
         }
 
         @Override
@@ -64,7 +68,7 @@ public class FileExtended extends File{
             super.enterMethodDeclaration(ctx);
 
             if(ctx.start != null) {
-                this.methods.add(new Method(ctx));
+                this.methods.add(new Method(ctx, this.file));
             }
         }
     }
@@ -79,10 +83,6 @@ public class FileExtended extends File{
 
     public ArrayList<Method> getMethods() {
         return this.methods;
-    }
-
-    private void test() {
-        System.out.println("test");
     }
 
 }

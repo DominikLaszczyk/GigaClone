@@ -16,6 +16,8 @@ import main.Models.CloneGraph;
 import main.Models.FileExtended;
 import main.resources.Strings;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import java.util.ResourceBundle;
 public class CloneGraphMenuController implements Initializable {
 
     private int numOfGraphs;
+    WebView cloneGraphWebView;
     private WebEngine engine;
 
     @FXML
@@ -48,7 +51,7 @@ public class CloneGraphMenuController implements Initializable {
         }
     }
 
-    public void detectClones() {
+    public void detectClones() throws FileNotFoundException {
         //get selected clone detection algorithm
         CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
         ObservableList<FileExtended> files = FileController.getFileModel().getFinalFileList();
@@ -71,6 +74,17 @@ public class CloneGraphMenuController implements Initializable {
 
 
     private void loadRadialTree() {
+        //clear cache
+        //engine.load("about:blank");
+
+
+        //load html to webview
+
+        engine.reload();
+        URL url2 = this.getClass().getResource(CloneGraph.getIndexPage());
+
+        engine.load(url2.toString());
+
         //run radial tree script after the html file is loaded
         engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
@@ -78,11 +92,8 @@ public class CloneGraphMenuController implements Initializable {
                 engine.executeScript("printRadialTree()");
             }
         });
-
-        //load html to webview
-        URL url = this.getClass().getResource(CloneGraph.getIndexPage());
-        engine.load(url.toString());
     }
+
 
     private void loadHEB() {
 
@@ -95,8 +106,12 @@ public class CloneGraphMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         numOfGraphs = CloneVisController.getNumOfGraphs();
-        WebView cloneGraphWebView = CloneVisController.getCloneGraphWebView();
+        cloneGraphWebView = CloneVisController.getCloneGraphWebView();
         engine = cloneGraphWebView.getEngine();
+        URL url2 = this.getClass().getResource(CloneGraph.getIndexPage());
+
+        engine.load(url2.toString());
+
 
         //initialize clone detection algorithm types in combobox
         ObservableList<CloneDetection.Algorithm> cloneDetectionAlgorithms = FXCollections.observableArrayList();

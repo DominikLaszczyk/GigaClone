@@ -2,11 +2,15 @@ package main.Models;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import java.io.File;
+
 public class Method extends ParserRuleContext {
     private ParserRuleContext parserRuleContext;
+    private FileExtended file;
 
-    public Method(ParserRuleContext parserRuleContext) {
+    public Method(ParserRuleContext parserRuleContext, FileExtended file) {
         this.parserRuleContext = parserRuleContext;
+        this.file = file;
     }
 
     @Override
@@ -16,12 +20,7 @@ public class Method extends ParserRuleContext {
 
     @Override
     public boolean equals(Object object) {
-//        System.out.println("-----------------------------");
-//        System.out.println(this.parserRuleContext.getText().getClass());
-//        System.out.println(((ParserRuleContext)object).getText());
-//        System.out.println(object.getClass());
-//        System.out.println("-----------------------------");
-        return this.parserRuleContext.getText().equals(((Method)object).getParserRuleContext().getText());
+        return object instanceof Method && this.parserRuleContext.getText().equals(((Method)object).getParserRuleContext().getText());
     }
 
     @Override
@@ -32,5 +31,13 @@ public class Method extends ParserRuleContext {
 
     public ParserRuleContext getParserRuleContext() {
         return this.parserRuleContext;
+    }
+
+    public FileExtended getFile() {
+        return this.file;
+    }
+
+    public void setFile(FileExtended file) {
+        this.file = file;
     }
 }
