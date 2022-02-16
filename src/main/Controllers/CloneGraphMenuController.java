@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import main.Models.Alerts;
 import main.Models.Algorithms.TextualCloneDetection;
@@ -16,10 +17,11 @@ import main.Models.CloneGraph;
 import main.Models.FileExtended;
 import main.resources.Strings;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.net.URL;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -38,7 +40,7 @@ public class CloneGraphMenuController implements Initializable {
     private Button detectClonesButton;
 
 
-    public void showGraph(){
+    public void showGraph() throws IOException {
         CloneGraph.Type cloneGraphType = cloneGraphTypeComboBox.getValue();
         if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
             loadRadialTree();
@@ -74,24 +76,26 @@ public class CloneGraphMenuController implements Initializable {
 
 
     private void loadRadialTree() {
-        //clear cache
-        //engine.load("about:blank");
+        String data = null;
+        String radialTree = null;
+        try {
+            data = Files.readString(Paths.get("src/main/Data/textClones.js"));
+            radialTree = Files.readString(Paths.get("src/main/CloneGraphs/RadialTree.js"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-        //load html to webview
-
-        engine.reload();
-        URL url2 = this.getClass().getResource(CloneGraph.getIndexPage());
-
-        engine.load(url2.toString());
+        // new page has loaded, process:
+        engine.executeScript(radialTree);
+        engine.executeScript(data);
+        engine.executeScript("printRadialTree()");
 
         //run radial tree script after the html file is loaded
-        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-            if (newState == Worker.State.SUCCEEDED) {
-                // new page has loaded, process:
-                engine.executeScript("printRadialTree()");
-            }
-        });
+//        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+//            if (newState == Worker.State.SUCCEEDED) {
+//
+//            }
+//        });
     }
 
 
@@ -108,9 +112,13 @@ public class CloneGraphMenuController implements Initializable {
         numOfGraphs = CloneVisController.getNumOfGraphs();
         cloneGraphWebView = CloneVisController.getCloneGraphWebView();
         engine = cloneGraphWebView.getEngine();
-        URL url2 = this.getClass().getResource(CloneGraph.getIndexPage());
 
+        URL url2 = this.getClass().getResource(CloneGraph.getIndexPage());
         engine.load(url2.toString());
+
+        engine.setOnAlert((WebEvent<String> wEvent) -> {
+            System.out.println("JS alert() message: " + wEvent.getData() );
+        });
 
 
         //initialize clone detection algorithm types in combobox

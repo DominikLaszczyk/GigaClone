@@ -30,7 +30,7 @@ public abstract class CloneDetection {
         }
     }
 
-    protected abstract void detectClones() throws FileNotFoundException;
+    protected abstract String detectClones() throws FileNotFoundException;
 
     protected abstract Set<CloneClass> convertPairsToClasses(Set<ClonePair> clonePairs);
 

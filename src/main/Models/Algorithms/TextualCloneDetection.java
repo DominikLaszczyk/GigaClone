@@ -30,7 +30,7 @@ public class TextualCloneDetection extends CloneDetection {
     }
 
     @Override
-    public void detectClones() throws FileNotFoundException {
+    public String detectClones() throws FileNotFoundException {
         this.cloneClasses.clear();
         this.clonePairs.clear();
 
@@ -70,32 +70,29 @@ public class TextualCloneDetection extends CloneDetection {
             }
         }
 
-//        StringBuilder finalClone = new StringBuilder("var data = {name: 'flare',\n" +
-//                "    children: [\n");
-//
-//        int cloneClassCounter = 1;
-//
-//        for(CloneClass cc : this.cloneClasses) {
-//            finalClone.append("{name: '").append(cloneClassCounter).append("',children: [");
-//            for(Method clone : cc.getClones()) {
-//                //{ name: 'AgglomerativeCluster', value: 3938 },
-//                finalClone.append("{ name: '")
-//                        .append(clone.getFile().getName())
-//                        .append("'},");
-//
-//                System.out.println(clone.getFile().getName());
-//            }
-//            finalClone.append("],},");
-//            cloneClassCounter++;
-//        }
-//
-//        finalClone.append("],};");
-//
-//        try (PrintWriter out = new PrintWriter("textClones.js")) {
-//            out.println(finalClone);
-//        }
+//        finalClonesSB = new StringBuilder("<!DOCTYPE html>\n" +
+//                "\n" +
+//                "<html lang=\"\">\n" +
+//                "    <head>\n" +
+//                "        <link rel=\"stylesheet\" href=\"../resources/stylesheets/main.css\">\n" +
+//                "        <script src=\"https://d3js.org/d3.v6.min.js\"></script>\n" +
+//                "        <script src=\"RadialTree.js\"></script>\n" +
+//                "        <title></title>\n" +
+//                "    </head>\n" +
+//                "\n" +
+//               // "    <body onload=\"printRadialTree();\">\n" +
+//                "    <body>\n" +
+//                "\n" +
+//                "    <main class=\"content\">\n" +
+//                "        <svg id=\"chart\" width=\"750\" height=\"750\" viewBox=\"0 0 750 750\"\n" +
+//                "             preserveAspectRatio=\"xMidYMid meet\"></svg>\n" +
+//                "    </main>\n" +
+//                "\n" +
+//                "    <script>\n");
 
-        finalClonesSB = new StringBuilder("var data = {\n");
+        finalClonesSB = new StringBuilder();
+
+        finalClonesSB.append("data = {\n");
 
         String finalClones = CloneDetection.radialTreeCloneBuilder(
             FileController.getChosenDirectory(),
@@ -105,9 +102,18 @@ public class TextualCloneDetection extends CloneDetection {
 
         finalClones += "\n};";
 
+//        finalClones +=
+//                "    </script>\n" +
+//                "\n" +
+//                "\n" +
+//                "    </body>\n" +
+//                "</html>";
+
         try (PrintWriter out = new PrintWriter("src/main/Data/textClones.js")) {
             out.println(finalClones);
         }
+
+        return finalClones;
     }
 
     @Override

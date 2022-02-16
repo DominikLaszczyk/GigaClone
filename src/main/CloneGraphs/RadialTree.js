@@ -1,4 +1,5 @@
 function printRadialTree() {
+    alert("RADIAL TREE");
     const cloneGraph = document.getElementById("chart");
     cloneGraph.textContent = '';
 
