@@ -115,7 +115,8 @@ public class FileController implements Initializable {
                         file.getIncluded().isSelected()).collect(Collectors.toList())
                 );
 
-        if(selectedTableFiles.size() >= 2) {
+        //if(selectedTableFiles.size() >= 2) {
+        if(true) {
             extractMethodsTask = new Task<>() {
                 @Override
                 public Void call() throws Exception {

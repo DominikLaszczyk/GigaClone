@@ -34,7 +34,12 @@ public abstract class CloneDetection {
 
     protected abstract Set<CloneClass> convertPairsToClasses(Set<ClonePair> clonePairs);
 
-    protected static String radialTreeCloneBuilder(File chosenDirectory, ObservableList<FileExtended> filesExtended, StringBuilder finalClones) {
+    protected static String radialTreeCloneBuilder(
+            File chosenDirectory,
+            ObservableList<FileExtended> filesExtended,
+            StringBuilder finalClones,
+            Set<CloneClass> cloneClasses) {
+
         TreeItem<File> treeRoot = new TreeItem<>(chosenDirectory);
         File[] children = chosenDirectory.listFiles();
         List<String> paths = new ArrayList<>();
@@ -46,8 +51,16 @@ public abstract class CloneDetection {
         //loop over all the nodes in the tree starting from given root
         if(children != null) {
             String dirName = chosenDirectory.getName().replace("'", "");
-            finalClones.append("name: '").append("").append("',\n");
-            finalClones.append("children: [\n");
+            finalClones.append("name: '").append(dirName).append("',\n");
+            if(paths.contains(chosenDirectory.getPath())) {
+                finalClones.append("value: '").append("1").append("',\n");
+            }
+            else {
+                finalClones.append("value: '").append("0").append("',\n");
+            }
+
+            finalClones.append("children:\n");
+            finalClones.append("[\n");
             for(File child: children) {
 
                 finalClones.append("{");
@@ -56,12 +69,27 @@ public abstract class CloneDetection {
                 treeRoot.getChildren().add(newNodeFile);
 
                 if(child.isDirectory()) {
-                    radialTreeCloneBuilder(child, filesExtended, finalClones);
+                    radialTreeCloneBuilder(child, filesExtended, finalClones, cloneClasses);
                 }
-                //else if (paths.contains(child.getPath())){
-                else {
-                    String fileName = child.getName().replace("'", "");
-                    finalClones.append("name: '").append("").append("'\n");
+                else if (paths.contains(child.getPath())){
+                //else {
+                    Boolean isClone = false;
+                    for(CloneClass cc : cloneClasses) {
+                        if(cc.getCloneMethod().getFile().getPath().equals(child.getPath())) {
+                            isClone = true;
+                        }
+                    }
+
+                    if(isClone) {
+                        String fileName = child.getName().replace("'", "");
+                        finalClones.append("name: '").append(fileName).append("',\n");
+                        finalClones.append("value: '").append("1").append("'\n");
+                    }
+                    else {
+                        finalClones.append("name: '").append("").append("',\n");
+                        finalClones.append("value: '").append("0").append("'\n");
+                    }
+
                 }
                 //}
 

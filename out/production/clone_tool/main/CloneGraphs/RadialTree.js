@@ -1,4 +1,5 @@
 function printRadialTree() {
+    alert("RADIAL TREE");
     const cloneGraph = document.getElementById("chart");
     cloneGraph.textContent = '';
 
@@ -14,6 +15,17 @@ function printRadialTree() {
             .sort((a, b) => d3.ascending(a.data.name, b.data.name))
     );
 
+    //let nodes = generateLinks(data);
+
+    //that's all... no magic, no bloated framework
+    let links = [];
+
+    generateLinks(root.descendants(), links);
+
+    alert(links);
+    alert(root.links());
+
+
     const svg = d3
         .select('svg')
         .attr('width', '100%')
@@ -21,6 +33,7 @@ function printRadialTree() {
         .append('g')
         .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
+    //edges
     svg
         .append('g')
         .attr('fill', 'none')
@@ -28,7 +41,7 @@ function printRadialTree() {
         .attr('stroke-opacity', 0.4)
         .attr('stroke-width', 1.5)
         .selectAll('path')
-        .data(root.links())
+        .data(links)
         .join('path')
         .attr(
             'd',
@@ -37,6 +50,18 @@ function printRadialTree() {
                 .angle((d) => d.x)
                 .radius((d) => d.y)
         )
+        .each(function(d) {
+
+            //alert("---------------------------------------------");
+            for (let i in d) {
+
+                //alert(i + " - " + d[i]);
+
+
+            }
+            //alert("---------------------------------------------");
+
+        })
         .on('mouseover', function(d) {
             d3.select(this).style("stroke", "blue");
             d3.select(this).style("stroke-width", 7.0);
@@ -60,7 +85,16 @@ function printRadialTree() {
               `
         )
         .attr('fill', (d) => (d.children ? '#555' : '#999'))
-        .attr('r', 2.5);
+        .attr('r', 2.5)
+        .style("visibility", function(d){
+            //alert(d.data.value);
+            // if(d.data.value === "1") {
+            //     //alert("BOI");
+            //     return 'visible'
+            // } else {
+            //     return 'hidden'
+            // }
+        });
 
     svg
         .append('g')
@@ -89,3 +123,15 @@ function printRadialTree() {
         .lower()
         .attr('stroke', 'white');
 }
+
+
+function generateLinks(nodes, links) {
+    for(let i in nodes) {
+        if (nodes[i] !== null && typeof(nodes[i])=="object" && nodes[i].parent !== null && typeof(nodes[i].parent)=="object") {
+            //if(nodes[i].data.value === "1") {
+                links.push({source:nodes[i].parent,target:nodes[i]})
+            //}
+        }
+    }
+}
+

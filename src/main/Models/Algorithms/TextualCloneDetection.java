@@ -70,44 +70,17 @@ public class TextualCloneDetection extends CloneDetection {
             }
         }
 
-//        finalClonesSB = new StringBuilder("<!DOCTYPE html>\n" +
-//                "\n" +
-//                "<html lang=\"\">\n" +
-//                "    <head>\n" +
-//                "        <link rel=\"stylesheet\" href=\"../resources/stylesheets/main.css\">\n" +
-//                "        <script src=\"https://d3js.org/d3.v6.min.js\"></script>\n" +
-//                "        <script src=\"RadialTree.js\"></script>\n" +
-//                "        <title></title>\n" +
-//                "    </head>\n" +
-//                "\n" +
-//               // "    <body onload=\"printRadialTree();\">\n" +
-//                "    <body>\n" +
-//                "\n" +
-//                "    <main class=\"content\">\n" +
-//                "        <svg id=\"chart\" width=\"750\" height=\"750\" viewBox=\"0 0 750 750\"\n" +
-//                "             preserveAspectRatio=\"xMidYMid meet\"></svg>\n" +
-//                "    </main>\n" +
-//                "\n" +
-//                "    <script>\n");
-
         finalClonesSB = new StringBuilder();
-
         finalClonesSB.append("data = {\n");
 
         String finalClones = CloneDetection.radialTreeCloneBuilder(
             FileController.getChosenDirectory(),
             FileController.getFileModel().getFinalFileList(),
-                finalClonesSB
+            finalClonesSB,
+            this.cloneClasses
         );
 
         finalClones += "\n};";
-
-//        finalClones +=
-//                "    </script>\n" +
-//                "\n" +
-//                "\n" +
-//                "    </body>\n" +
-//                "</html>";
 
         try (PrintWriter out = new PrintWriter("src/main/Data/textClones.js")) {
             out.println(finalClones);

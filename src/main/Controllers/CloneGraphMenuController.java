@@ -117,7 +117,7 @@ public class CloneGraphMenuController implements Initializable {
         engine.load(url2.toString());
 
         engine.setOnAlert((WebEvent<String> wEvent) -> {
-            System.out.println("JS alert() message: " + wEvent.getData() );
+            System.out.println("JS alert() : " + wEvent.getData() );
         });
 
 
