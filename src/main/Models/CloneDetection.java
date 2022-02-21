@@ -6,6 +6,7 @@ import main.Controllers.FileController;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +31,7 @@ public abstract class CloneDetection {
         }
     }
 
-    protected abstract String detectClones() throws FileNotFoundException;
+    protected abstract String detectClones() throws IOException;
 
     protected abstract Set<CloneClass> convertPairsToClasses(Set<ClonePair> clonePairs);
 
@@ -38,21 +39,39 @@ public abstract class CloneDetection {
             File chosenDirectory,
             ObservableList<FileExtended> filesExtended,
             StringBuilder finalClones,
-            Set<CloneClass> cloneClasses) {
+            Set<CloneClass> cloneClasses) throws IOException {
 
         TreeItem<File> treeRoot = new TreeItem<>(chosenDirectory);
         File[] children = chosenDirectory.listFiles();
-        List<String> paths = new ArrayList<>();
-
-        for(FileExtended fileExtended : filesExtended) {
-            paths.add(fileExtended.getPath());
-        }
+        List<Path> paths = new ArrayList<>();
 
         //loop over all the nodes in the tree starting from given root
         if(children != null) {
             String dirName = chosenDirectory.getName().replace("'", "");
             finalClones.append("name: '").append(dirName).append("',\n");
-            if(paths.contains(chosenDirectory.getPath())) {
+
+            boolean areRelated = false;
+
+
+                for(CloneClass cc : cloneClasses) {
+                    for(File file : cc.getFiles()) {
+                        if(
+                                (file.getCanonicalPath().contains(chosenDirectory.getCanonicalPath() + File.separator)) &&
+                           (chosenDirectory.getCanonicalPath().contains(cc.getHighestPath() + File.separator))
+                        ){
+                            areRelated = true;
+                            break;
+                        }
+                    }
+
+                    if(areRelated) {
+                        break;
+                    }
+                }
+
+
+
+            if(areRelated) {
                 finalClones.append("value: '").append("1").append("',\n");
             }
             else {
@@ -61,7 +80,7 @@ public abstract class CloneDetection {
 
             finalClones.append("children:\n");
             finalClones.append("[\n");
-            for(File child: children) {
+            for(File child : children) {
 
                 finalClones.append("{");
 
@@ -71,14 +90,18 @@ public abstract class CloneDetection {
                 if(child.isDirectory()) {
                     radialTreeCloneBuilder(child, filesExtended, finalClones, cloneClasses);
                 }
-                else if (paths.contains(child.getPath())){
-                //else {
-                    Boolean isClone = false;
+                else {
+
+                    boolean isClone = false;
                     for(CloneClass cc : cloneClasses) {
-                        if(cc.getCloneMethod().getFile().getPath().equals(child.getPath())) {
-                            isClone = true;
+                        for(Method clone : cc.getClones()) {
+                            if (clone.getFile().equals(child)) {
+                                isClone = true;
+                                break;
+                            }
                         }
                     }
+
 
                     if(isClone) {
                         String fileName = child.getName().replace("'", "");
@@ -91,7 +114,6 @@ public abstract class CloneDetection {
                     }
 
                 }
-                //}
 
                 finalClones.append("},");
             }

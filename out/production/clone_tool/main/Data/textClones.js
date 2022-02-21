@@ -3,66 +3,24 @@ name: 'COM2008',
 value: '0',
 children:
 [
-{},{},{name: 'bin',
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'bin',
 value: '0',
 children:
 [
-{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{name: 'dbTest',
-value: '0',
-children:
-[
-{},{},
-],
-},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{name: 'images',
-value: '0',
-children:
-[
-{},{},{name: 'adminImages',
-value: '0',
-children:
-[
-{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
-],
-},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
-],
-},{},{},{},{name: 'lib',
-value: '0',
-children:
-[
-{},{},{},
-],
-},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{name: 'UML',
-value: '0',
-children:
-[
-{},{},{},{},
-],
-},
-],
-},{},{},{name: 'some txts',
-value: '0',
-children:
-[
-{},{},{},
-],
-},{name: 'src',
-value: '0',
-children:
-[
-{name: 'ActionListener.java',
-value: '1'
-},{name: 'AddDegree.java',
-value: '1'
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
 },{name: '',
 value: '0'
 },{name: '',
 value: '0'
-},{name: 'AddStudent.java',
-value: '1'
 },{name: '',
 value: '0'
-},{name: 'AdminFunc.java',
-value: '1'
 },{name: '',
 value: '0'
 },{name: '',
@@ -73,8 +31,14 @@ value: '0'
 value: '0'
 },{name: '',
 value: '0'
-},{name: 'ChangeModules.java',
-value: '1'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
 },{name: '',
 value: '0'
 },{name: 'dbTest',
@@ -91,12 +55,168 @@ value: '0'
 value: '0'
 },{name: '',
 value: '0'
-},{name: 'EventMouse.java',
-value: '1'
 },{name: '',
 value: '0'
-},{name: 'GenerateTable.java',
-value: '1'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
 },{name: '',
 value: '0'
 },{name: '',
@@ -105,26 +225,180 @@ value: '0'
 value: '0',
 children:
 [
-{},{},{name: 'adminImages',
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'adminImages',
 value: '0',
 children:
 [
-{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
 ],
-},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
 ],
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
 },{name: '',
 value: '0'
 },{name: 'lib',
 value: '0',
 children:
 [
-{},{},{},
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
 ],
 },{name: '',
 value: '0'
-},{},{name: '',
-value: '0'
 },{name: '',
 value: '0'
 },{name: '',
@@ -133,8 +407,10 @@ value: '0'
 value: '0'
 },{name: '',
 value: '0'
-},{name: 'StudentPage.java',
-value: '1'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
 },{name: '',
 value: '0'
 },{name: '',
@@ -153,7 +429,307 @@ value: '0'
 value: '0',
 children:
 [
-{},{},{},{},
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
+],
+},
+],
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'some txts',
+value: '0',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
+],
+},{name: 'src',
+value: '0',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'dbTest',
+value: '1',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
+],
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'images',
+value: '1',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'adminImages',
+value: '1',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
+],
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
+],
+},{name: '',
+value: '0'
+},{name: 'lib',
+value: '0',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
+],
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: 'UML',
+value: '0',
+children:
+[
+{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},{name: '',
+value: '0'
+},
 ],
 },
 ],

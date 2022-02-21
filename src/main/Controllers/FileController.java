@@ -128,7 +128,7 @@ public class FileController implements Initializable {
                             updateProgress(0.0, 100.0);
                             break;
                         }
-                        file.extractMethods(file);
+                        file.extractMethods(file, chosenLanguage);
                         iterator++;
                         updateProgress((iterator/files.size())*100.0, 100.0);
                     }

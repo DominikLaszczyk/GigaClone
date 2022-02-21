@@ -22,8 +22,8 @@ function printRadialTree() {
 
     generateLinks(root.descendants(), links);
 
-    alert(links);
-    alert(root.links());
+    //alert(links);
+   // alert(root.links());
 
 
     const svg = d3
@@ -45,19 +45,36 @@ function printRadialTree() {
         .join('path')
         .attr(
             'd',
-            d3
-                .linkRadial()
+            // d3.radialLine()
+            //     .angle((d) => d.x)
+            //     .radius((d) => d.y)
+                // .x(function(d) { return d.x; })
+                // .y(function(d) { return d.y; })
+                // .curve(d3.curveLinear)
+            d3.linkRadial()
+                //.curve(d3.curveBundle.beta(0.85))
                 .angle((d) => d.x)
                 .radius((d) => d.y)
-        )
+
+)
+        .style("stroke", function(d){
+            return d.colour;
+        })
+        .style("stroke-width", function(d){
+            return d.width;
+        })
         .on('mouseover', function(d) {
             d3.select(this).style("stroke", "blue");
             d3.select(this).style("stroke-width", 7.0);
 
         })
         .on('mouseout', function(d) {
-            d3.select(this).style("stroke", "black");
-            d3.select(this).style("stroke-width", 1.0);
+            d3.select(this).style("stroke", function(e) {
+                return e.colour;
+            });
+            d3.select(this).style("stroke-width", function(e) {
+                return e.width;
+            });
         });
 
     svg
@@ -73,16 +90,7 @@ function printRadialTree() {
               `
         )
         .attr('fill', (d) => (d.children ? '#555' : '#999'))
-        .attr('r', 2.5)
-        .style("visibility", function(d){
-            //alert(d.data.value);
-            // if(d.data.value === "1") {
-            //     //alert("BOI");
-            //     return 'visible'
-            // } else {
-            //     return 'hidden'
-            // }
-        });
+        .attr('r', 2.0);
 
     svg
         .append('g')
@@ -116,9 +124,12 @@ function printRadialTree() {
 function generateLinks(nodes, links) {
     for(let i in nodes) {
         if (nodes[i] !== null && typeof(nodes[i])=="object" && nodes[i].parent !== null && typeof(nodes[i].parent)=="object") {
-            //if(nodes[i].data.value === "1") {
-                links.push({source:nodes[i].parent,target:nodes[i]})
-            //}
+            if(nodes[i].data.value === "1") {
+                links.push({source:nodes[i].parent, target:nodes[i], colour:"orange", width:"3.0"})
+            }
+            else {
+                links.push({source:nodes[i].parent, target:nodes[i], colour:"grey", width:"1.0"})
+            }
         }
     }
 }

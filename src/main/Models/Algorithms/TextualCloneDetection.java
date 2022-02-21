@@ -12,6 +12,7 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class TextualCloneDetection extends CloneDetection {
     }
 
     @Override
-    public String detectClones() throws FileNotFoundException {
+    public String detectClones() throws IOException {
         this.cloneClasses.clear();
         this.clonePairs.clear();
 
@@ -66,7 +67,10 @@ public class TextualCloneDetection extends CloneDetection {
 
         for(CloneClass cc : tempCloneClasses) {
             if(cc.getClones().size()>1) {
+                cc.computeHighestPath();
                 this.cloneClasses.add(cc);
+
+                System.out.println(cc);
             }
         }
 

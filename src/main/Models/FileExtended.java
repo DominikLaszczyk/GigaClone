@@ -2,6 +2,9 @@ package main.Models;
 
 
 import javafx.scene.control.CheckBox;
+import main.ANTLR.Cpp.CPP14Lexer;
+import main.ANTLR.Cpp.CPP14Parser;
+import main.ANTLR.Cpp.CPP14ParserBaseListener;
 import main.ANTLR.Java.Java8Lexer;
 import main.ANTLR.Java.Java8Parser;
 import main.ANTLR.Java.Java8ParserBaseListener;
@@ -37,19 +40,40 @@ public class FileExtended extends File{
     }
 
 
-    public void extractMethods(FileExtended file) throws IOException {
+    public void extractMethods(FileExtended file, Language language) throws IOException {
         String content = com.google.common.io.Files.asCharSource(file, StandardCharsets.ISO_8859_1).read();
         CharStream charStream = CharStreams.fromString(content);
-        Java8Lexer java8Lexer = new Java8Lexer(charStream);
-        CommonTokenStream commonTokenStream = new CommonTokenStream(java8Lexer);
 
-        Java8Parser parser = new Java8Parser(commonTokenStream);
-        Java8Parser.CompilationUnitContext tree = parser.compilationUnit(); // parse a compilationUnit
+        if(language.equals(Language.JAVA)) {
+            //System.out.println("JAVA");
+            Java8Lexer java8Lexer = new Java8Lexer(charStream);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(java8Lexer);
 
-        JavaListener extractor = new JavaListener(file);
-        ParseTreeWalker.DEFAULT.walk(extractor, tree);
+            Java8Parser parser = new Java8Parser(commonTokenStream);
+            Java8Parser.CompilationUnitContext tree = parser.compilationUnit(); // parse a compilationUnit
+            JavaListener extractor = new JavaListener(file);
 
-        this.methods = extractor.methods;
+            ParseTreeWalker.DEFAULT.walk(extractor, tree);
+
+            this.methods = extractor.methods;
+        }
+        else if(language.equals(Language.CPP)) {
+            //System.out.println("CPP");
+            CPP14Lexer cpp14Lexer = new CPP14Lexer(charStream);
+            CommonTokenStream commonTokenStream = new CommonTokenStream(cpp14Lexer);
+
+            CPP14Parser parser = new CPP14Parser(commonTokenStream);
+            //CPP14Parser.TranslationUnitContext = parser.translationUnit(); // parse a compilationUnit
+            CppListener extractor = new CppListener(file);
+
+
+            ParseTreeWalker.DEFAULT.walk(extractor, parser.translationUnit());
+
+            this.methods = extractor.methods;
+        }
+
+
+
     }
 
     static class JavaListener extends Java8ParserBaseListener {
@@ -67,6 +91,26 @@ public class FileExtended extends File{
         public void enterMethodDeclaration(Java8Parser.MethodDeclarationContext ctx) {
             super.enterMethodDeclaration(ctx);
 
+            if(ctx.start != null) {
+                this.methods.add(new Method(ctx, this.file));
+            }
+        }
+    }
+
+    static class CppListener extends CPP14ParserBaseListener {
+
+        private final ArrayList<Method> methods = new ArrayList<>();
+        private final FileExtended file;
+
+        public CppListener(FileExtended file ) {
+            super();
+
+            this.file = file;
+        }
+
+        @Override
+        public void enterFunctionDefinition(CPP14Parser.FunctionDefinitionContext ctx) {
+            super.enterFunctionDefinition(ctx);
             if(ctx.start != null) {
                 this.methods.add(new Method(ctx, this.file));
             }

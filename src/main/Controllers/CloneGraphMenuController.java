@@ -53,7 +53,7 @@ public class CloneGraphMenuController implements Initializable {
         }
     }
 
-    public void detectClones() throws FileNotFoundException {
+    public void detectClones() throws IOException {
         //get selected clone detection algorithm
         CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
         ObservableList<FileExtended> files = FileController.getFileModel().getFinalFileList();
