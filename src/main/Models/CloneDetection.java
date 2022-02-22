@@ -37,13 +37,11 @@ public abstract class CloneDetection {
 
     protected static String radialTreeCloneBuilder(
             File chosenDirectory,
-            ObservableList<FileExtended> filesExtended,
             StringBuilder finalClones,
             Set<CloneClass> cloneClasses) throws IOException {
 
         TreeItem<File> treeRoot = new TreeItem<>(chosenDirectory);
         File[] children = chosenDirectory.listFiles();
-        List<Path> paths = new ArrayList<>();
 
         //loop over all the nodes in the tree starting from given root
         if(children != null) {
@@ -51,25 +49,17 @@ public abstract class CloneDetection {
             finalClones.append("name: '").append(dirName).append("',\n");
 
             boolean areRelated = false;
-
-
-                for(CloneClass cc : cloneClasses) {
-                    for(File file : cc.getFiles()) {
-                        if(
-                                (file.getCanonicalPath().contains(chosenDirectory.getCanonicalPath() + File.separator)) &&
-                           (chosenDirectory.getCanonicalPath().contains(cc.getHighestPath() + File.separator))
-                        ){
-                            areRelated = true;
-                            break;
-                        }
-                    }
-
-                    if(areRelated) {
+            for(CloneClass cc : cloneClasses) {
+                for(File file : cc.getFiles()) {
+                    if((file.getCanonicalPath().contains(chosenDirectory.getCanonicalPath() + File.separator)) &&
+                       (chosenDirectory.getCanonicalPath().contains(cc.getHighestPath() + File.separator))){
+                        areRelated = true;
                         break;
                     }
                 }
 
-
+                if(areRelated) { break; }
+            }
 
             if(areRelated) {
                 finalClones.append("value: '").append("1").append("',\n");
@@ -88,7 +78,7 @@ public abstract class CloneDetection {
                 treeRoot.getChildren().add(newNodeFile);
 
                 if(child.isDirectory()) {
-                    radialTreeCloneBuilder(child, filesExtended, finalClones, cloneClasses);
+                    radialTreeCloneBuilder(child, finalClones, cloneClasses);
                 }
                 else {
 

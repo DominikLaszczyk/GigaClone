@@ -51,7 +51,6 @@ public class TextualCloneDetection extends CloneDetection {
                 //get one of the methods in the clone class
                 Method methodInCC = currentCloneClass.getCloneMethod();
                 if(currentMethod.equals(methodInCC)) {
-                    //System.out.println("BOI");
                     currentCloneClass.addClone(currentMethod);
                     belongsToCC = true;
                     break;
@@ -79,7 +78,6 @@ public class TextualCloneDetection extends CloneDetection {
 
         String finalClones = CloneDetection.radialTreeCloneBuilder(
             FileController.getChosenDirectory(),
-            FileController.getFileModel().getFinalFileList(),
             finalClonesSB,
             this.cloneClasses
         );

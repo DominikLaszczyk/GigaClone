@@ -15,15 +15,19 @@ function printRadialTree() {
             .sort((a, b) => d3.ascending(a.data.name, b.data.name))
     );
 
-    //let nodes = generateLinks(data);
 
-    //that's all... no magic, no bloated framework
     let links = [];
 
     generateLinks(root.descendants(), links);
 
-    //alert(links);
-   // alert(root.links());
+    var radialLine = d3.lineRadial()
+        .curve(d3.curveBundle.beta(0.85))
+        .angle(function(d) {
+            return d.x;
+        })
+        .radius(function(d) {
+            return d.y;
+        });
 
 
     const svg = d3
@@ -45,18 +49,15 @@ function printRadialTree() {
         .join('path')
         .attr(
             'd',
-            // d3.radialLine()
+            // d3.linkRadial()
             //     .angle((d) => d.x)
             //     .radius((d) => d.y)
-                // .x(function(d) { return d.x; })
-                // .y(function(d) { return d.y; })
-                // .curve(d3.curveLinear)
-            d3.linkRadial()
-                //.curve(d3.curveBundle.beta(0.85))
-                .angle((d) => d.x)
-                .radius((d) => d.y)
 
-)
+            function(d) {
+                return radialLine([d.source, d.target]);
+            }
+
+        )
         .style("stroke", function(d){
             return d.colour;
         })
@@ -77,47 +78,50 @@ function printRadialTree() {
             });
         });
 
-    svg
-        .append('g')
-        .selectAll('circle')
-        .data(root.descendants())
-        .join('circle')
-        .attr(
-            'transform',
-            (d) => `
-                rotate(${(d.x * 180) / Math.PI - 90})
-                translate(${d.y},0)
-              `
-        )
-        .attr('fill', (d) => (d.children ? '#555' : '#999'))
-        .attr('r', 2.0);
+    //nodes on files and dirs
+    // svg
+    //     .append('g')
+    //     .selectAll('circle')
+    //     .data(root.descendants())
+    //     .join('circle')
+    //     .attr(
+    //         'transform',
+    //         (d) => `
+    //             rotate(${(d.x * 180) / Math.PI - 90})
+    //             translate(${d.y},0)
+    //           `
+    //     )
+    //     .attr('fill', (d) => (d.children ? '#555' : '#999'))
+    //     .attr('r', 2.0);
 
-    svg
-        .append('g')
-        .attr('font-family', 'sans-serif')
-        .attr('font-size', 10)
-        .attr('stroke-linejoin', 'round')
-        .attr('stroke-width', 3)
-        .selectAll('text')
-        .data(root.descendants())
-        .join('text')
-        .attr(
-            'transform',
-            (d) => `
-                rotate(${(d.x * 180) / Math.PI - 90})
-                translate(${d.y},0)
-                rotate(${d.x >= Math.PI ? 180 : 0})
-              `
-        )
-        .attr('dy', '0.31em')
-        .attr('x', (d) => (d.x < Math.PI === !d.children ? 6 : -6))
-        .attr('text-anchor', (d) =>
-            d.x < Math.PI === !d.children ? 'start' : 'end'
-        )
-        .text((d) => d.data.name)
-        .clone(true)
-        .lower()
-        .attr('stroke', 'white');
+
+    //names of files and dirs
+    // svg
+    //     .append('g')
+    //     .attr('font-family', 'sans-serif')
+    //     .attr('font-size', 10)
+    //     .attr('stroke-linejoin', 'round')
+    //     .attr('stroke-width', 3)
+    //     .selectAll('text')
+    //     .data(root.descendants())
+    //     .join('text')
+    //     .attr(
+    //         'transform',
+    //         (d) => `
+    //             rotate(${(d.x * 180) / Math.PI - 90})
+    //             translate(${d.y},0)
+    //             rotate(${d.x >= Math.PI ? 180 : 0})
+    //           `
+    //     )
+    //     .attr('dy', '0.31em')
+    //     .attr('x', (d) => (d.x < Math.PI === !d.children ? 6 : -6))
+    //     .attr('text-anchor', (d) =>
+    //         d.x < Math.PI === !d.children ? 'start' : 'end'
+    //     )
+    //     .text((d) => d.data.name)
+    //     .clone(true)
+    //     .lower()
+    //     .attr('stroke', 'white');
 }
 
 
@@ -128,7 +132,7 @@ function generateLinks(nodes, links) {
                 links.push({source:nodes[i].parent, target:nodes[i], colour:"orange", width:"3.0"})
             }
             else {
-                links.push({source:nodes[i].parent, target:nodes[i], colour:"grey", width:"1.0"})
+                links.push({source:nodes[i].parent, target:nodes[i], colour:"white", width:"0.0"})
             }
         }
     }
