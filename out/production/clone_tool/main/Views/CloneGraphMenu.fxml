@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -16,6 +18,7 @@
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -30,27 +33,33 @@
             <Button fx:id="killTaskButton" mnemonicParsing="false" text="Kill task" />
          </children>
       </FlowPane>
-      <ComboBox fx:id="cloneGraphTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="Clone Graph Type" GridPane.rowIndex="1" />
-      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2">
+      <ComboBox fx:id="cloneGraphTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="Clone Graph Type" GridPane.rowIndex="2" />
+      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="3">
          <children>
-            <CheckBox mnemonicParsing="false" text="Display names" />
-            <CheckBox mnemonicParsing="false" text="Hide nodes without clones" />
+            <CheckBox fx:id="displayDirNamesCheckBox" mnemonicParsing="false" text="Display directory names" />
+            <CheckBox fx:id="displayNodesCheckBox" mnemonicParsing="false" text="Display dir and file nodes" />
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="3">
+      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="4">
          <children>
             <CheckBox mnemonicParsing="false" text="Type 1" />
             <CheckBox mnemonicParsing="false" text="Type 2" />
             <CheckBox mnemonicParsing="false" text="Type 3" />
          </children>
       </FlowPane>
-      <Slider majorTickUnit="10.0" min="5.0" showTickLabels="true" GridPane.rowIndex="4">
+      <Slider majorTickUnit="10.0" min="5.0" showTickLabels="true" GridPane.rowIndex="5">
          <GridPane.margin>
             <Insets right="15.0" />
          </GridPane.margin>
          <padding>
             <Insets left="15.0" />
          </padding></Slider>
-      <Button fx:id="showGraphButton" mnemonicParsing="false" onAction="#showGraph" text="Show Clone Graph" GridPane.rowIndex="5" />
+      <Button fx:id="showGraphButton" mnemonicParsing="false" onAction="#showGraph" text="Show Clone Graph" GridPane.rowIndex="6" />
+      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="1">
+         <children>
+            <ProgressBar fx:id="cloneDetectionProgressBar" prefWidth="170.0" progress="0.0" />
+            <Label fx:id="cloneDetectionProgressLabel" text="Label" />
+         </children>
+      </FlowPane>
    </children>
 </GridPane>

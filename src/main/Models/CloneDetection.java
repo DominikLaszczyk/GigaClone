@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public abstract class CloneDetection {
     public enum Algorithm {
@@ -50,8 +47,8 @@ public abstract class CloneDetection {
 
             boolean areRelated = false;
             for(CloneClass cc : cloneClasses) {
-                for(File file : cc.getFiles()) {
-                    if((file.getCanonicalPath().contains(chosenDirectory.getCanonicalPath() + File.separator)) &&
+                for(Method clone : cc.getClones()) {
+                    if((clone.getFile().getCanonicalPath().contains(chosenDirectory.getCanonicalPath() + File.separator)) &&
                        (chosenDirectory.getCanonicalPath().contains(cc.getHighestPath() + File.separator))){
                         areRelated = true;
                         break;

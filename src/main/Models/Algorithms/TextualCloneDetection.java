@@ -1,5 +1,8 @@
 package main.Models.Algorithms;
 
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import main.ANTLR.Java.Java8Parser;
@@ -24,6 +27,9 @@ public class TextualCloneDetection extends CloneDetection {
 
     StringBuilder finalClonesSB;
 
+    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
+    private final ReadOnlyStringWrapper message = new ReadOnlyStringWrapper();
+
     public TextualCloneDetection(ObservableList<FileExtended> files) {
         this.files = files;
         this.cloneClasses = new HashSet<>();
@@ -35,12 +41,17 @@ public class TextualCloneDetection extends CloneDetection {
         this.cloneClasses.clear();
         this.clonePairs.clear();
 
+        double iterator = 0.0;
+
+
         Set<CloneClass> tempCloneClasses = new HashSet<>();
         List<Method> allMethods = new ArrayList<>();
 
         for (FileExtended file : this.files) {
             allMethods.addAll(file.getMethods());
         }
+
+        message.set("Detecting clones...");
 
         //loop through all methods
         for(Method currentMethod : allMethods) {
@@ -62,6 +73,9 @@ public class TextualCloneDetection extends CloneDetection {
                 newCloneClass.addClone(currentMethod);
                 tempCloneClasses.add(newCloneClass);
             }
+
+            iterator++;
+            progress.set(iterator/allMethods.size());
         }
 
         for(CloneClass cc : tempCloneClasses) {
@@ -72,6 +86,8 @@ public class TextualCloneDetection extends CloneDetection {
                 System.out.println(cc);
             }
         }
+
+        message.set("Constructing clone file...");
 
         finalClonesSB = new StringBuilder();
         finalClonesSB.append("data = {\n");
@@ -88,13 +104,25 @@ public class TextualCloneDetection extends CloneDetection {
             out.println(finalClones);
         }
 
+        message.set("Done!");
+
         return finalClones;
     }
+
 
     @Override
     protected Set<CloneClass> convertPairsToClasses(Set<ClonePair> clonePairs) {
         return null;
     }
+
+    public ReadOnlyDoubleProperty progressProperty() {
+        return progress;
+    }
+
+    public ReadOnlyStringWrapper messageProperty() {
+        return message;
+    }
+
 
 
 }

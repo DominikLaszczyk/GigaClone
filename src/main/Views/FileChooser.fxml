@@ -123,9 +123,9 @@
                   </Label>
                </top>
                <bottom>
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="955.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="36.0" BorderPane.alignment="CENTER">
                      <children>
-                        <ProgressBar fx:id="processFilesProgressBar" prefHeight="18.0" prefWidth="738.0" progress="0.0">
+                        <ProgressBar fx:id="processFilesProgressBar" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="738.0" progress="0.0">
                            <HBox.margin>
                               <Insets bottom="3.0" left="10.0" right="10.0" />
                            </HBox.margin>

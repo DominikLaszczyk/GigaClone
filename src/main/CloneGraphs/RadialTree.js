@@ -1,4 +1,7 @@
-function printRadialTree() {
+function printRadialTree(
+    displayDirNames,
+    displayNodes
+) {
     alert("RADIAL TREE");
     const cloneGraph = document.getElementById("chart");
     cloneGraph.textContent = '';
@@ -22,10 +25,10 @@ function printRadialTree() {
 
     var radialLine = d3.lineRadial()
         .curve(d3.curveBundle.beta(0.85))
-        .angle(function(d) {
+        .angle(function (d) {
             return d.x;
         })
-        .radius(function(d) {
+        .radius(function (d) {
             return d.y;
         });
 
@@ -53,75 +56,78 @@ function printRadialTree() {
             //     .angle((d) => d.x)
             //     .radius((d) => d.y)
 
-            function(d) {
+            function (d) {
                 return radialLine([d.source, d.target]);
             }
-
         )
-        .style("stroke", function(d){
+        .style("stroke", function (d) {
             return d.colour;
         })
-        .style("stroke-width", function(d){
+        .style("stroke-width", function (d) {
             return d.width;
         })
-        .on('mouseover', function(d) {
+        .on('mouseover', function (d) {
             d3.select(this).style("stroke", "blue");
             d3.select(this).style("stroke-width", 7.0);
 
         })
-        .on('mouseout', function(d) {
-            d3.select(this).style("stroke", function(e) {
+        .on('mouseout', function (d) {
+            d3.select(this).style("stroke", function (e) {
                 return e.colour;
             });
-            d3.select(this).style("stroke-width", function(e) {
+            d3.select(this).style("stroke-width", function (e) {
                 return e.width;
             });
         });
 
     //nodes on files and dirs
-    // svg
-    //     .append('g')
-    //     .selectAll('circle')
-    //     .data(root.descendants())
-    //     .join('circle')
-    //     .attr(
-    //         'transform',
-    //         (d) => `
-    //             rotate(${(d.x * 180) / Math.PI - 90})
-    //             translate(${d.y},0)
-    //           `
-    //     )
-    //     .attr('fill', (d) => (d.children ? '#555' : '#999'))
-    //     .attr('r', 2.0);
+    if(displayNodes) {
+        svg
+            .append('g')
+            .selectAll('circle')
+            .data(root.descendants())
+            .join('circle')
+            .attr(
+                'transform',
+                (d) => `
+                    rotate(${(d.x * 180) / Math.PI - 90})
+                    translate(${d.y},0)
+                  `
+            )
+            .attr('fill', (d) => (d.children ? '#555' : '#999'))
+            .attr('r', 2.0);
+    }
 
 
     //names of files and dirs
-    // svg
-    //     .append('g')
-    //     .attr('font-family', 'sans-serif')
-    //     .attr('font-size', 10)
-    //     .attr('stroke-linejoin', 'round')
-    //     .attr('stroke-width', 3)
-    //     .selectAll('text')
-    //     .data(root.descendants())
-    //     .join('text')
-    //     .attr(
-    //         'transform',
-    //         (d) => `
-    //             rotate(${(d.x * 180) / Math.PI - 90})
-    //             translate(${d.y},0)
-    //             rotate(${d.x >= Math.PI ? 180 : 0})
-    //           `
-    //     )
-    //     .attr('dy', '0.31em')
-    //     .attr('x', (d) => (d.x < Math.PI === !d.children ? 6 : -6))
-    //     .attr('text-anchor', (d) =>
-    //         d.x < Math.PI === !d.children ? 'start' : 'end'
-    //     )
-    //     .text((d) => d.data.name)
-    //     .clone(true)
-    //     .lower()
-    //     .attr('stroke', 'white');
+    if (displayDirNames) {
+        svg
+            .append('g')
+            .attr('font-family', 'sans-serif')
+            .attr('font-size', 10)
+            .attr('stroke-linejoin', 'round')
+            .attr('stroke-width', 3)
+            .selectAll('text')
+            .data(root.descendants())
+            .join('text')
+            .attr(
+                'transform',
+                (d) => `
+                    rotate(${(d.x * 180) / Math.PI - 90})
+                    translate(${d.y},0)
+                    rotate(${d.x >= Math.PI ? 180 : 0})
+                  `
+            )
+            .attr('dy', '0.31em')
+            .attr('x', (d) => (d.x < Math.PI === !d.children ? 6 : -6))
+            .attr('text-anchor', (d) =>
+                d.x < Math.PI === !d.children ? 'start' : 'end'
+            )
+            .text((d) => d.data.name)
+            .clone(true)
+            .lower()
+            .attr('stroke', 'white');
+    }
 }
 
 

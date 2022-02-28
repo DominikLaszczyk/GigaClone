@@ -1,6 +1,7 @@
 package main.Models;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -61,7 +62,7 @@ public class CloneClass {
         return this.clones;
     }
 
-    public void addClone(Method clone) {
+    public void addClone(Method clone) throws IOException {
         this.clones.add(clone);
     }
 
@@ -69,13 +70,4 @@ public class CloneClass {
         return this.cloneMethod;
     }
 
-    public List<File> getFiles() {
-        List<File> result = new ArrayList<>();
-
-        for(Method method : this.clones) {
-            result.add(method.getFile());
-        }
-
-        return result;
-    }
 }

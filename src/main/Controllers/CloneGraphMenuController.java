@@ -2,11 +2,11 @@ package main.Controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
@@ -31,6 +31,7 @@ public class CloneGraphMenuController implements Initializable {
     private int numOfGraphs;
     WebView cloneGraphWebView;
     private WebEngine engine;
+    Task<Void> detectClonesTask;
 
     @FXML
     private ComboBox<CloneGraph.Type> cloneGraphTypeComboBox = new ComboBox<>();
@@ -38,9 +39,52 @@ public class CloneGraphMenuController implements Initializable {
     private ComboBox<CloneDetection.Algorithm> cloneDetectionAlgorithmComboBox = new ComboBox<>();
     @FXML
     private Button detectClonesButton;
+    @FXML
+    private ProgressBar cloneDetectionProgressBar;
+    @FXML
+    private Label cloneDetectionProgressLabel;
+    @FXML
+    private CheckBox displayDirNamesCheckBox;
+    @FXML
+    private CheckBox displayNodesCheckBox;
 
 
-    public void showGraph() throws IOException {
+    public void detectClones() throws IOException {
+        //get selected clone detection algorithm
+        CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
+        ObservableList<FileExtended> files = FileController.getFileModel().getFinalFileList();
+
+        detectClonesTask = new Task<>() {
+            @Override
+            public Void call() throws Exception {
+                if (cloneDetectionAlgorithm == null) {
+                    Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
+                } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
+                    TextualCloneDetection textCloneDetection = new TextualCloneDetection(files);
+                    textCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
+                            updateProgress(newProgress.doubleValue(), 1));
+                    textCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
+                            updateMessage(newMessage));
+
+                    textCloneDetection.detectClones();
+                } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
+
+                } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.AST) {
+
+                }
+
+                return null;
+            }
+        };
+
+        cloneDetectionProgressBar.progressProperty().bind(detectClonesTask.progressProperty());
+//        detectClonesTask.messageProperty().addListener((obs, oldMessage, newMessage) ->
+//                mainController.postMessage(newMessage));
+        cloneDetectionProgressLabel.textProperty().bind(detectClonesTask.messageProperty());
+        new Thread(detectClonesTask).start();
+    }
+
+    public void showGraph() {
         CloneGraph.Type cloneGraphType = cloneGraphTypeComboBox.getValue();
         if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
             loadRadialTree();
@@ -50,26 +94,6 @@ public class CloneGraphMenuController implements Initializable {
         }
         else if(cloneGraphType == CloneGraph.Type.SCATTER) {
             loadScatter();
-        }
-    }
-
-    public void detectClones() throws IOException {
-        //get selected clone detection algorithm
-        CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
-        ObservableList<FileExtended> files = FileController.getFileModel().getFinalFileList();
-
-        if(cloneDetectionAlgorithm == null) {
-            Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
-        }
-        else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
-            TextualCloneDetection textCloneDetection = new TextualCloneDetection(files);
-            textCloneDetection.detectClones();
-        }
-        else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
-
-        }
-        else if(cloneDetectionAlgorithm == CloneDetection.Algorithm.AST) {
-
         }
     }
 
@@ -88,14 +112,13 @@ public class CloneGraphMenuController implements Initializable {
         // new page has loaded, process:
         engine.executeScript(radialTree);
         engine.executeScript(data);
-        engine.executeScript("printRadialTree()");
+        engine.executeScript(
+                "printRadialTree(" +
+                        displayDirNamesCheckBox.isSelected() + "," +
+                        displayNodesCheckBox.isSelected() +
+                        ")"
+        );
 
-        //run radial tree script after the html file is loaded
-//        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-//            if (newState == Worker.State.SUCCEEDED) {
-//
-//            }
-//        });
     }
 
 
@@ -119,6 +142,16 @@ public class CloneGraphMenuController implements Initializable {
         engine.setOnAlert((WebEvent<String> wEvent) -> {
             System.out.println("JS alert() : " + wEvent.getData() );
         });
+
+        //initialise d3
+        String d3 = null;
+        try {
+            d3 = Files.readString(Paths.get("lib/d3.min.js"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        engine.executeScript(d3);
 
 
         //initialize clone detection algorithm types in combobox
