@@ -12,11 +12,11 @@ import main.resources.Strings;
 
 public class Main extends Application {
 
-    private static final int MIN_WINDOW_WIDTH = 1000;
-    private static final int MIN_WINDOW_HEIGHT = 600;
+    private static final int MIN_WINDOW_WIDTH = 1100;
+    private static final int MIN_WINDOW_HEIGHT = 800;
 
     private static final int PREF_WINDOW_WIDTH = 1200;
-    private static final int PREF_WINDOW_HEIGHT = 700;
+    private static final int PREF_WINDOW_HEIGHT = 800;
 
     //root pane
     private static final BorderPane root = new BorderPane();

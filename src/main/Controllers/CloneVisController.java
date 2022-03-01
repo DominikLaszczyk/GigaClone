@@ -129,13 +129,17 @@ public class CloneVisController implements Initializable {
         clonePane.getRowConstraints().clear();
         clonePane.getColumnConstraints().clear();
 
+        clonePane.setMinHeight(10);
+
         //2 rows, 1 col
         RowConstraints row1 = new RowConstraints();
         RowConstraints row2 = new RowConstraints();
         ColumnConstraints col1 = new ColumnConstraints();
 
-        row1.setPercentHeight(80.0); //80% height for clone graph
-        row2.setPercentHeight(20.0); //20% height for clone menu
+        row2.setMinHeight(row2.getPrefHeight());
+
+        row1.setPercentHeight(70.0); //80% height for clone graph
+        row2.setPercentHeight(30.0); //20% height for clone menu
 
         clonePane.getRowConstraints().addAll(row1, row2);
         clonePane.getColumnConstraints().add(col1);

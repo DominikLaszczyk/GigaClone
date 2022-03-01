@@ -8,14 +8,32 @@ import java.util.List;
 import java.util.Set;
 
 public class CloneClass {
+    public enum Type {
+        ONE("1"),
+        TWO("2"),
+        THREE("3");
+
+        private final String name;
+
+        Type(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return  name;
+        }
+    }
 
     private List<Method> clones;
     private Method cloneMethod;
     private String highestPath;
+    private Type type;
 
-    public CloneClass(Method cloneMethod) {
+    public CloneClass(Method cloneMethod, Type type) {
         this.clones = new ArrayList<>();
         this.cloneMethod = cloneMethod;
+        this.type = type;
     }
 
     public void computeHighestPath() {
@@ -62,12 +80,16 @@ public class CloneClass {
         return this.clones;
     }
 
-    public void addClone(Method clone) throws IOException {
+    public void addClone(Method clone) {
         this.clones.add(clone);
     }
 
     public Method getCloneMethod() {
         return this.cloneMethod;
+    }
+
+    public Type getType() {
+        return this.type;
     }
 
 }

@@ -69,7 +69,7 @@ public class TextualCloneDetection extends CloneDetection {
             }
 
             if(!belongsToCC) {
-                CloneClass newCloneClass = new CloneClass(currentMethod);
+                CloneClass newCloneClass = new CloneClass(currentMethod, CloneClass.Type.ONE);
                 newCloneClass.addClone(currentMethod);
                 tempCloneClasses.add(newCloneClass);
             }

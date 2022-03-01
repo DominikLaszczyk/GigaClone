@@ -38,7 +38,8 @@ public class CloneGraphMenuController implements Initializable {
     @FXML
     private ComboBox<CloneDetection.Algorithm> cloneDetectionAlgorithmComboBox = new ComboBox<>();
     @FXML
-    private Button detectClonesButton;
+    private ComboBox<String> ccSizeMoreLessComboBox = new ComboBox<>();
+
     @FXML
     private ProgressBar cloneDetectionProgressBar;
     @FXML
@@ -47,9 +48,21 @@ public class CloneGraphMenuController implements Initializable {
     private CheckBox displayDirNamesCheckBox;
     @FXML
     private CheckBox displayNodesCheckBox;
+    @FXML
+    private CheckBox displayFileNamesCheckBox;
+    @FXML
+    private Label ccSizeLabel;
+    @FXML
+    private Slider ccSizeSlider;
 
+    @FXML
+    private CheckBox cloneType1CheckBox;
+    @FXML
+    private CheckBox cloneType2CheckBox;
+    @FXML
+    private CheckBox cloneType3CheckBox;
 
-    public void detectClones() throws IOException {
+    public void detectClones() {
         //get selected clone detection algorithm
         CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
         ObservableList<FileExtended> files = FileController.getFileModel().getFinalFileList();
@@ -112,10 +125,28 @@ public class CloneGraphMenuController implements Initializable {
         // new page has loaded, process:
         engine.executeScript(radialTree);
         engine.executeScript(data);
+
+        System.out.println("printRadialTree(" +
+                displayDirNamesCheckBox.isSelected() + "," +
+                displayNodesCheckBox.isSelected() + "," +
+                displayFileNamesCheckBox.isSelected() + "," +
+                cloneType1CheckBox.isSelected() + "," +
+                cloneType2CheckBox.isSelected() + "," +
+                cloneType3CheckBox.isSelected() + "," +
+                "\"" + ccSizeMoreLessComboBox.getValue() + "\"" + "," +
+                (int)ccSizeSlider.getValue() +
+                ")");
+
         engine.executeScript(
                 "printRadialTree(" +
                         displayDirNamesCheckBox.isSelected() + "," +
-                        displayNodesCheckBox.isSelected() +
+                        displayNodesCheckBox.isSelected() + "," +
+                        displayFileNamesCheckBox.isSelected() + "," +
+                        cloneType1CheckBox.isSelected() + "," +
+                        cloneType2CheckBox.isSelected() + "," +
+                        cloneType3CheckBox.isSelected() + "," +
+                        "\"" + ccSizeMoreLessComboBox.getValue() + "\"" + "," +
+                        (int)ccSizeSlider.getValue() +
                         ")"
         );
 
@@ -163,5 +194,13 @@ public class CloneGraphMenuController implements Initializable {
         ObservableList<CloneGraph.Type> cloneGraphTypes = FXCollections.observableArrayList();
         cloneGraphTypes.addAll(CloneGraph.Type.values());
         cloneGraphTypeComboBox.setItems(cloneGraphTypes);
+
+        //initialise clone class size restraint combobox
+        ObservableList<String> MoreLessValues = FXCollections.observableArrayList();
+        MoreLessValues.addAll("More than", "Less than");
+        ccSizeMoreLessComboBox.setItems(MoreLessValues);
+        ccSizeMoreLessComboBox.getSelectionModel().select(0);
+
+        ccSizeLabel.textProperty().bind(ccSizeSlider.valueProperty().asString("%.0f clones"));
     }
 }
