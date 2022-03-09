@@ -3,7 +3,6 @@ package main.Controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,18 +11,15 @@ import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import main.Models.Alerts;
 import main.Models.Algorithms.TextualCloneDetection;
-import main.Models.CloneDetection;
+import main.Models.Algorithms.CloneDetection;
 import main.Models.CloneGraph;
 import main.Models.FileExtended;
-import main.resources.Strings;
 
 import java.io.*;
 import java.net.URL;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class CloneGraphMenuController implements Initializable {

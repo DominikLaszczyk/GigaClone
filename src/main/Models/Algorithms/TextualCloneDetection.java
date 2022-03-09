@@ -4,17 +4,9 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TreeItem;
-import main.ANTLR.Java.Java8Parser;
 import main.Controllers.FileController;
 import main.Models.*;
-import org.antlr.v4.runtime.ParserRuleContext;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -39,7 +31,7 @@ public class TextualCloneDetection extends CloneDetection {
     }
 
     @Override
-    public String detectClones() throws IOException {
+    public void detectClones() throws IOException {
         this.cloneClasses.clear();
         this.clonePairs.clear();
 
@@ -108,14 +100,6 @@ public class TextualCloneDetection extends CloneDetection {
         }
 
         message.set("Done!");
-
-        return finalClones;
-    }
-
-
-    @Override
-    protected Set<CloneClass> convertPairsToClasses(Set<ClonePair> clonePairs) {
-        return null;
     }
 
     public ReadOnlyDoubleProperty progressProperty() {

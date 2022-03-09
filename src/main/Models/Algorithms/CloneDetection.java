@@ -1,9 +1,12 @@
-package main.Models;
+package main.Models.Algorithms;
 
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import main.Controllers.FileController;
+import main.Models.CloneClass;
+import main.Models.ClonePair;
+import main.Models.Method;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,9 +34,7 @@ public abstract class CloneDetection {
 
     public static Double fileCounter = 0.0;
 
-    protected abstract String detectClones() throws IOException;
-
-    protected abstract Set<CloneClass> convertPairsToClasses(Set<ClonePair> clonePairs);
+    protected abstract void detectClones() throws IOException;
 
     protected static String radialTreeCloneBuilder(
             File chosenDirectory,
@@ -52,20 +53,13 @@ public abstract class CloneDetection {
             boolean areRelated = false;
             boolean isRootCloneDirectory = false;
             CloneClass.Type dirCloneType = null;
-            Integer ccSize = null;
+            StringBuilder ccSizes = new StringBuilder("[");
             for(CloneClass cc : cloneClasses) {
-                if(ccSize == null) {
-                    ccSize = cc.getClones().size();
-                }
-
-
                 //check if current directory is the root clone directory
                 if(chosenDirectory.getCanonicalPath().equals(cc.getHighestPath())) {
                     isRootCloneDirectory = true;
                     dirCloneType = cc.getType();
-                    if(cc.getClones().size() > ccSize) {
-                        ccSize = cc.getClones().size();
-                    }
+                    ccSizes.append(cc.getClones().size()).append(",");
                 }
 
                 for(Method clone : cc.getClones()) {
@@ -74,19 +68,18 @@ public abstract class CloneDetection {
                        (chosenDirectory.getCanonicalPath().contains(cc.getHighestPath() + File.separator))){
                         areRelated = true;
                         dirCloneType = cc.getType();
-                        if(cc.getClones().size() > ccSize) {
-                            ccSize = cc.getClones().size();
-                        }
+                        ccSizes.append(cc.getClones().size()).append(",");
                     }
-
-
                 }
-
             }
+            if(ccSizes.charAt(ccSizes.length()-1) == ',') {
+                ccSizes.setLength(ccSizes.length() - 1);
+            }
+            ccSizes.append("]");
 
             if(areRelated || isRootCloneDirectory) {
                 finalClones.append("type: '").append(dirCloneType).append("',\n");
-                finalClones.append("size: '").append(ccSize).append("',\n");
+                finalClones.append("sizes: ").append(ccSizes).append(",\n");
             }
 
             if(areRelated) {
@@ -114,29 +107,27 @@ public abstract class CloneDetection {
 
                     boolean isClone = false;
                     CloneClass.Type cloneType = null;
-                    Integer fileCcSize = null;
+                    StringBuilder fileCcSizes = new StringBuilder("[");
                     for(CloneClass cc : cloneClasses) {
-                        if (fileCcSize == null) {
-                            fileCcSize = cc.getClones().size();
-                        }
-
                         for(Method clone : cc.getClones()) {
                             if (clone.getFile().equals(child)) {
                                 isClone = true;
                                 cloneType = cc.getType();
-                                if(cc.getClones().size()>fileCcSize) {
-                                    fileCcSize = cc.getClones().size();
-                                }
+                                fileCcSizes.append(cc.getClones().size()).append(",");
                             }
                         }
                     }
+                    if(fileCcSizes.charAt(fileCcSizes.length()-1) == ',') {
+                        fileCcSizes.setLength(fileCcSizes.length() - 1);
+                    }
+                    fileCcSizes.append("]");
 
 
                     if(isClone) {
                         String fileName = child.getName().replace("'", "");
                         finalClones.append("name: '").append(fileName).append("',\n");
                         finalClones.append("type: '").append(cloneType).append("',\n");
-                        finalClones.append("size: '").append(fileCcSize).append("',\n");
+                        finalClones.append("sizes: ").append(fileCcSizes).append(",\n");
                         finalClones.append("isFile: '").append("1").append("',\n");
                         finalClones.append("isClone: '").append("1").append("'\n");
                     }

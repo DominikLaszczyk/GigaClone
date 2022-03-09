@@ -38,6 +38,11 @@ function printRadialTree(
     );
 
 
+    //tooltip
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip-donut")
+        .style("opacity", 0);
+
 
     var radialLine = d3.lineRadial()
         .curve(d3.curveBundle.beta(0.85))
@@ -71,29 +76,31 @@ function printRadialTree(
             // d3.linkRadial()
             //     .angle((d) => d.x)
             //     .radius((d) => d.y)
-
             function (d) {
                 return radialLine([d.source, d.target]);
             }
         )
-        .style("stroke", function (d) {
-            return d.colour;
-        })
-        .style("stroke-width", function (d) {
-            return d.width;
-        })
-        .on('mouseover', function (d) {
-            d3.select(this).style("stroke", "blue");
-            d3.select(this).style("stroke-width", 7.0);
+        .style("stroke", function (d) {return d.colour;})
+        .style("stroke-width", function (d) {return d.width;})
 
+        .on('mouseover', function(event, d) {
+            d3.select(this).transition()
+                .duration('50')
+                .attr('opacity', '.85');
+            //Makes the new div appear on hover:
+            div.transition()
+                .duration(50)
+                .style("opacity", 1);
+            div.html(d.sizes)
+                .style("left", "10px")
+                .style("top", "10px");
         })
         .on('mouseout', function (d) {
-            d3.select(this).style("stroke", function (e) {
-                return e.colour;
-            });
-            d3.select(this).style("stroke-width", function (e) {
-                return e.width;
-            });
+            d3.select(this).style("stroke", function (e) {return e.colour;});
+            d3.select(this).style("stroke-width", function (e) {return e.width;});
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 
     //nodes on files and dirs
@@ -162,14 +169,20 @@ function printRadialTree(
 
 function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
     for(let i in nodes) {
-        if((moreLess === "More than" && ccSize < nodes[i].data.size) || (moreLess === "Less than" && ccSize > nodes[i].data.size)) {
-            if((type1 && nodes[i].data.type === "1") || (type2 && nodes[i].data.type === "2") || (type3 && nodes[i].data.type === "3")) {
-                if (nodes[i] !== null && typeof(nodes[i])=="object" && nodes[i].parent !== null && typeof(nodes[i].parent)=="object") {
-                    if(nodes[i].data.isClone === "1") {
-                        links.push({source:nodes[i].parent, target:nodes[i], colour:"orange", width:"3.0"})
-                    }
-                    else {
-                        links.push({source:nodes[i].parent, target:nodes[i], colour:"white", width:"0.0"})
+        let sizes = nodes[i].data.sizes
+        if(typeof sizes !== 'undefined') {
+            if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
+                if ((type1 && nodes[i].data.type === "1") || (type2 && nodes[i].data.type === "2") || (type3 && nodes[i].data.type === "3")) {
+                    if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
+                        if (nodes[i].data.isClone === "1") {
+                            links.push({
+                                source: nodes[i].parent,
+                                target: nodes[i],
+                                colour: "orange",
+                                width: "3.0",
+                                sizes:sizes
+                            })
+                        }
                     }
                 }
             }
@@ -180,10 +193,13 @@ function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
 
 function generateCloneRootDirs(nodes, cloneRootDirs, moreLess, ccSize) {
     for(let i in nodes) {
-        if((moreLess === "More than" && ccSize < nodes[i].data.size) || (moreLess === "Less than" && ccSize > nodes[i].data.size)) {
-            if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
-                if (nodes[i].data.isRootCloneDir === "1") {
-                    cloneRootDirs.push(nodes[i])
+        let sizes = nodes[i].data.sizes
+        if(typeof sizes !== 'undefined') {
+            if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
+                if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
+                    if (nodes[i].data.isRootCloneDir === "1") {
+                        cloneRootDirs.push(nodes[i])
+                    }
                 }
             }
         }
@@ -192,13 +208,17 @@ function generateCloneRootDirs(nodes, cloneRootDirs, moreLess, ccSize) {
 
 function generateCloneFiles(nodes, cloneRootDirs, moreLess, ccSize) {
     for(let i in nodes) {
-        if((moreLess === "More than" && ccSize < nodes[i].data.size) || (moreLess === "Less than" && ccSize > nodes[i].data.size)) {
-            if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
-                if (nodes[i].data.isFile === "1") {
-                    cloneRootDirs.push(nodes[i])
+        let sizes = nodes[i].data.sizes
+        if(typeof sizes !== 'undefined') {
+            if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
+                if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
+                    if (nodes[i].data.isFile === "1") {
+                        cloneRootDirs.push(nodes[i])
+                    }
                 }
             }
         }
     }
 }
+
 
