@@ -27,6 +27,8 @@ public class TextualCloneDetection extends CloneDetection {
 
     StringBuilder finalClonesSB;
 
+
+
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
     private final ReadOnlyStringWrapper message = new ReadOnlyStringWrapper();
 
@@ -95,7 +97,8 @@ public class TextualCloneDetection extends CloneDetection {
         String finalClones = CloneDetection.radialTreeCloneBuilder(
             FileController.getChosenDirectory(),
             finalClonesSB,
-            this.cloneClasses
+            this.cloneClasses,
+            progress
         );
 
         finalClones += "\n};";

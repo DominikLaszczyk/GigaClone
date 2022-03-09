@@ -35,8 +35,9 @@ public class FileController implements Initializable {
 
     private static FileModel fileModel = new FileModel();
     static File chosenDirectory;
-    Language chosenLanguage;
+    public static Language chosenLanguage;
     ObservableList<FileExtended> tableFiles = FXCollections.observableArrayList();
+    public static int numOfFiles;
 
     @FXML
     private BorderPane fileOptionsBorderPane;
@@ -86,6 +87,7 @@ public class FileController implements Initializable {
     }
 
     public void loadFilesInTableView() throws IOException {
+        numOfFiles = 0;
         if(chosenDirectory != null && chosenLanguage != null) {
             fileModel.getFileList().clear();
 
@@ -108,7 +110,7 @@ public class FileController implements Initializable {
         }
     }
 
-    public void proceed() throws IOException {
+    public void proceed() {
         //filter only the selected files from the table view
         ObservableList<FileExtended> selectedTableFiles =
                 FXCollections.observableList(tableFiles.stream().filter(file ->

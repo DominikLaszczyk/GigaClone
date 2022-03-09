@@ -121,11 +121,11 @@ function printRadialTree(
         let nodesWithText = []
 
         if(displayDirNames) {
-            generateCloneRootDirs(root.descendants(), nodesWithText);
+            generateCloneRootDirs(root.descendants(), nodesWithText, moreLess, ccSize);
         }
 
         if(displayFileNames) {
-            generateCloneFiles(root.descendants(), nodesWithText);
+            generateCloneFiles(root.descendants(), nodesWithText, moreLess, ccSize);
         }
 
 
@@ -178,21 +178,25 @@ function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
 }
 
 
-function generateCloneRootDirs(nodes, cloneRootDirs) {
+function generateCloneRootDirs(nodes, cloneRootDirs, moreLess, ccSize) {
     for(let i in nodes) {
-        if (nodes[i] !== null && typeof(nodes[i])=="object" && nodes[i].parent !== null && typeof(nodes[i].parent)=="object") {
-            if(nodes[i].data.isRootCloneDir === "1") {
-                cloneRootDirs.push(nodes[i])
+        if((moreLess === "More than" && ccSize < nodes[i].data.size) || (moreLess === "Less than" && ccSize > nodes[i].data.size)) {
+            if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
+                if (nodes[i].data.isRootCloneDir === "1") {
+                    cloneRootDirs.push(nodes[i])
+                }
             }
         }
     }
 }
 
-function generateCloneFiles(nodes, cloneRootDirs) {
+function generateCloneFiles(nodes, cloneRootDirs, moreLess, ccSize) {
     for(let i in nodes) {
-        if (nodes[i] !== null && typeof(nodes[i])=="object" && nodes[i].parent !== null && typeof(nodes[i].parent)=="object") {
-            if(nodes[i].data.isFile === "1") {
-                cloneRootDirs.push(nodes[i])
+        if((moreLess === "More than" && ccSize < nodes[i].data.size) || (moreLess === "Less than" && ccSize > nodes[i].data.size)) {
+            if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
+                if (nodes[i].data.isFile === "1") {
+                    cloneRootDirs.push(nodes[i])
+                }
             }
         }
     }

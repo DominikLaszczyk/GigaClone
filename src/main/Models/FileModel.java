@@ -3,6 +3,7 @@ package main.Models;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
+import main.Controllers.FileController;
 import main.resources.Strings;
 
 import java.io.File;
@@ -21,6 +22,7 @@ public class FileModel {
 
         //loop over all the nodes in the tree starting from given root
         if(children != null) {
+
             for(File child: children) {
                 String fileName = child.getName();
 
@@ -35,6 +37,11 @@ public class FileModel {
                     if(language.getExtension().equals(fileExt)) {
                         fileList.add(new FileExtended(child, allIncluded));
                     }
+                }
+
+
+                if(!child.isDirectory()) {
+                    FileController.numOfFiles++;
                 }
             }
         }
