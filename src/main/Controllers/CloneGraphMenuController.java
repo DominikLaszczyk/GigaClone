@@ -99,23 +99,76 @@ public class CloneGraphMenuController implements Initializable {
         new Thread(detectClonesTask).start();
     }
 
-    public void showGraph() {
+    public void showGraph() throws IOException {
         CloneGraph.Type cloneGraphType = cloneGraphTypeComboBox.getValue();
-        if(cloneDetectionAlgorithmComboBox.getValue() == null) {
+        CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
+        if(cloneDetectionAlgorithm == null) {
             Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
         }
         else if(cloneGraphType == null) {
             Alerts.noCloneGraphTypeSelectedAlert().showAndWait();
         }
-        else if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
-            loadRadialTree();
+        else {
+            String script = "";
+            String cloneGraphAlgorithm = null;
+            String data = null;
+            try {
+                switch(cloneGraphType) {
+                    case RADIALTREE:
+                        cloneGraphAlgorithm = Files.readString(Paths.get("src/main/CloneGraphs/RadialTree.js"));
+                        script += "printRadialTree(";
+                        switch(cloneDetectionAlgorithm) {
+                            case TEXT:
+                                data = Files.readString(Paths.get("src/main/Data/textClonesHierarchy.js"));
+                                break;
+                            case TOKEN:
+                                data = Files.readString(Paths.get("src/main/Data/tokenClonesHierarchy.js"));
+                                break;
+                        }
+                        break;
+                    case SCATTERPLOT:
+                        cloneGraphAlgorithm = Files.readString(Paths.get("src/main/CloneGraphs/ScatterPlot.js"));
+                        script += "printScatterPlot(";
+                        switch(cloneDetectionAlgorithm) {
+                            case TEXT:
+                                data = Files.readString(Paths.get("src/main/Data/textClonesArray.js"));
+                                break;
+                            case TOKEN:
+                                data = Files.readString(Paths.get("src/main/Data/tokenClonesArray.js"));
+                                break;
+                        }
+                        break;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            engine.executeScript(cloneGraphAlgorithm);
+            engine.executeScript(data);
+
+            script +=
+                    displayDirNamesCheckBox.isSelected() + "," +
+                    displayNodesCheckBox.isSelected() + "," +
+                    displayFileNamesCheckBox.isSelected() + "," +
+                    cloneType1CheckBox.isSelected() + "," +
+                    cloneType2CheckBox.isSelected() + "," +
+                    cloneType3CheckBox.isSelected() + "," +
+                    "\"" + ccSizeMoreLessComboBox.getValue() + "\"" + "," +
+                    (int)ccSizeSlider.getValue() +
+                    ")";
+
+            engine.executeScript(script);
         }
-        else if(cloneGraphType == CloneGraph.Type.HEB) {
-            loadHEB();
-        }
-        else if(cloneGraphType == CloneGraph.Type.SCATTER) {
-            loadScatter();
-        }
+//        else if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
+//            loadRadialTree();
+//        }
+//        else if(cloneGraphType == CloneGraph.Type.TREEMAP) {
+//            loadTreeMap();
+//        }
+//        else if(cloneGraphType == CloneGraph.Type.SCATTER) {
+//            loadScatter();
+//        }
     }
 
 
@@ -125,10 +178,10 @@ public class CloneGraphMenuController implements Initializable {
         String radialTree = null;
         try {
             if(cloneDetectionAlgorithmComboBox.getValue() == CloneDetection.Algorithm.TEXT) {
-                data = Files.readString(Paths.get("src/main/Data/textClones.js"));
+                data = Files.readString(Paths.get("src/main/Data/textClonesHierarchy.js"));
             }
             else if(cloneDetectionAlgorithmComboBox.getValue() == CloneDetection.Algorithm.TOKEN) {
-                data = Files.readString(Paths.get("src/main/Data/tokenClones.js"));
+                data = Files.readString(Paths.get("src/main/Data/tokenClonesHierarchy.js"));
             }
 
             radialTree = Files.readString(Paths.get("src/main/CloneGraphs/RadialTree.js"));
@@ -151,14 +204,12 @@ public class CloneGraphMenuController implements Initializable {
                 (int)ccSizeSlider.getValue() +
                 ")";
 
-        System.out.println(script);
-
         engine.executeScript(script);
 
     }
 
 
-    private void loadHEB() {
+    private void loadTreeMap() {
 
     }
 

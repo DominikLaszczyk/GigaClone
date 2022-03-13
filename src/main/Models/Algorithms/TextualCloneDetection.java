@@ -64,20 +64,28 @@ public class TextualCloneDetection extends CloneDetection {
             }
         }
 
-        message.set("Constructing clone file...");
+        message.set("Constructing clone file 1...");
 
         finalClonesSB = new StringBuilder("data = {\n");
 
-        String finalClones = this.radialTreeCloneBuilder(
+        String hierarchyClones = this.radialTreeCloneBuilder(
             FileController.getChosenDirectory(),
             finalClonesSB,
             this.cloneClasses
         );
 
-        finalClones += "\n};";
+        hierarchyClones += "\n};";
 
-        try (PrintWriter out = new PrintWriter("src/main/Data/textClones.js")) {
-            out.println(finalClones);
+        try (PrintWriter out = new PrintWriter("src/main/Data/textClonesHierarchy.js")) {
+            out.println(hierarchyClones);
+        }
+
+        message.set("Constructing clone file 2...");
+
+        String arrayClones = this.arrayCloneBuilder(this.cloneClasses);
+
+        try (PrintWriter out = new PrintWriter("src/main/Data/textClonesArray.js")) {
+            out.println(arrayClones);
         }
 
         message.set("Done!");

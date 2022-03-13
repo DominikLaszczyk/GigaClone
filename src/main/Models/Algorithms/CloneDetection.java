@@ -51,6 +51,72 @@ public abstract class CloneDetection {
         this.cloneClasses = new HashSet<>();
     }
 
+    protected String arrayCloneBuilder(Set<CloneClass> cloneClasses) {
+
+        StringBuilder finalClones = new StringBuilder("data = [");
+        StringBuilder labels = new StringBuilder("labels = [");
+        Integer id = 0;
+        HashMap<Integer, File> cloneFilesIds = new HashMap<>();
+        HashMap<File, Integer> cloneFilesIdsRev = new HashMap<>();
+
+        for(CloneClass cc : cloneClasses) {
+            for(Method clone : cc.getClones()) {
+                if(!cloneFilesIds.containsValue(clone.getFile())) {
+                    cloneFilesIds.put(id, clone.getFile());
+                    cloneFilesIdsRev.put(clone.getFile(), id);
+                    id++;
+                }
+            }
+        }
+
+
+        System.out.println(cloneFilesIds);
+        for(Integer k=0; k<id; k++) {
+            File currentCloneFile = cloneFilesIds.get(k);
+
+            labels
+                    .append("\"")
+                    .append(currentCloneFile.getName())
+                    .append("\",");
+
+            for(CloneClass cc : cloneClasses) {
+                List<Method> clonesInCurrentCC = cc.getClones();
+
+                boolean isInCC = false;
+                for(Method clone : clonesInCurrentCC) {
+                    if(clone.getFile().equals(currentCloneFile)) {
+                        isInCC = true;
+                        break;
+                    }
+                }
+
+                if(isInCC) {
+                    for(Method clone : clonesInCurrentCC) {
+                        finalClones
+                                .append("[")
+                                .append(k)
+                                .append(",")
+                                .append(cloneFilesIdsRev.get(clone.getFile()))
+                                .append("],");
+                    }
+                }
+            }
+        }
+
+        if(finalClones.charAt(finalClones.length()-1) == ',') { finalClones.setLength(finalClones.length() - 1); }
+        finalClones.append("]");
+
+        if(labels.charAt(labels.length()-1) == ',') { labels.setLength(labels.length() - 1); }
+        labels.append("]");
+
+        System.out.println(finalClones);
+        System.out.println(labels);
+
+
+
+        return labels + "\n" + finalClones;
+    }
+
     protected String radialTreeCloneBuilder(
             File chosenDirectory,
             StringBuilder finalClones,
