@@ -36,6 +36,12 @@ public class CloneClass {
         this.type = type;
     }
 
+    public CloneClass(Method cloneMethod) {
+        this.clones = new ArrayList<>();
+        this.cloneMethod = cloneMethod;
+        this.type = null;
+    }
+
     public void computeHighestPath() {
         List<String> paths = new ArrayList<>();
         for(Method method : clones) {
@@ -68,7 +74,7 @@ public class CloneClass {
     public String toString() {
         String result = "";
 
-        result += this.clones.size() + " -- " + cloneMethod;
+        result += this.clones.size() + " -- " + this.type.name + " -- " +cloneMethod;
         return result;
     }
 
@@ -90,6 +96,14 @@ public class CloneClass {
 
     public Type getType() {
         return this.type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public boolean hasType() {
+        return this.type != null;
     }
 
 }

@@ -7,6 +7,7 @@ public class Alerts {
     private static final Alert noDirOrLangChosenAlert = new Alert(Alert.AlertType.ERROR);
     private static final Alert noFilesIncludedAlert = new Alert(Alert.AlertType.ERROR);
     private static final Alert noCloneDetectionAlgorithmSelectedAlert = new Alert(Alert.AlertType.ERROR);
+    private static final Alert noCloneGraphTypeSelectedAlert = new Alert(Alert.AlertType.ERROR);
 
     public static Alert getNoDirOrLangChosenAlert() {
         noDirOrLangChosenAlert.setContentText(Strings.NO_DIR_OR_LANG_CHOSEN_CONTENT_TEXT);
@@ -24,5 +25,11 @@ public class Alerts {
         noCloneDetectionAlgorithmSelectedAlert.setContentText(Strings.NO_CLONE_DETECTION_ALGORITHM_SELECTED_CONTENT_TEXT);
         noCloneDetectionAlgorithmSelectedAlert.setHeaderText(Strings.NO_CLONE_DETECTION_ALGORITHM_SELECTED_HEADER_TEXT);
         return noCloneDetectionAlgorithmSelectedAlert;
+    }
+
+    public static Alert noCloneGraphTypeSelectedAlert() {
+        noCloneGraphTypeSelectedAlert.setContentText(Strings.NO_CLONE_GRAPH_TYPE_SELECTED_CONTENT_TEXT);
+        noCloneGraphTypeSelectedAlert.setHeaderText(Strings.NO_CLONE_GRAPH_TYPE_SELECTED_HEADER_TEXT);
+        return noCloneGraphTypeSelectedAlert;
     }
 }

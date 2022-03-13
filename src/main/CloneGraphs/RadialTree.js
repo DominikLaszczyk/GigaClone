@@ -92,8 +92,8 @@ function printRadialTree(
                 .duration(50)
                 .style("opacity", 1);
             div.html(d.sizes)
-                .style("left", "10px")
-                .style("top", "10px");
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
         })
         .on('mouseout', function (d) {
             d3.select(this).style("stroke", function (e) {return e.colour;});
@@ -128,11 +128,11 @@ function printRadialTree(
         let nodesWithText = []
 
         if(displayDirNames) {
-            generateCloneRootDirs(root.descendants(), nodesWithText, moreLess, ccSize);
+            generateCloneRootDirs(root.descendants(), nodesWithText, moreLess, ccSize, type1, type2, type3);
         }
 
         if(displayFileNames) {
-            generateCloneFiles(root.descendants(), nodesWithText, moreLess, ccSize);
+            generateCloneFiles(root.descendants(), nodesWithText, moreLess, ccSize, type1, type2, type3);
         }
 
 
@@ -170,18 +170,30 @@ function printRadialTree(
 function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
     for(let i in nodes) {
         let sizes = nodes[i].data.sizes
-        if(typeof sizes !== 'undefined') {
+        let types = nodes[i].data.types
+        if((typeof sizes !== 'undefined' && sizes.length > 0) && (typeof types !== 'undefined' && types.length > 0)) {
             if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
-                if ((type1 && nodes[i].data.type === "1") || (type2 && nodes[i].data.type === "2") || (type3 && nodes[i].data.type === "3")) {
+                if ((type1 && types.includes(1)) || (type2 && types.includes(2))  || (type3 && types.includes(3))) {
                     if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
                         if (nodes[i].data.isClone === "1") {
-                            links.push({
+                            let link = {
                                 source: nodes[i].parent,
                                 target: nodes[i],
-                                colour: "orange",
                                 width: "3.0",
                                 sizes:sizes
-                            })
+                            }
+
+                            if (type1 && types.includes(1)) {
+                                link.colour = "orange";
+                            }
+                            else if(type2 && types.includes(2)) {
+                                link.colour = "blue";
+                            }
+                            else if(type3 && types.includes(3)) {
+                                link.colour = "green";
+                            }
+
+                            links.push(link)
                         }
                     }
                 }
@@ -191,14 +203,17 @@ function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
 }
 
 
-function generateCloneRootDirs(nodes, cloneRootDirs, moreLess, ccSize) {
+function generateCloneRootDirs(nodes, cloneRootDirs, moreLess, ccSize, type1, type2, type3) {
     for(let i in nodes) {
         let sizes = nodes[i].data.sizes
-        if(typeof sizes !== 'undefined') {
+        let types = nodes[i].data.types
+        if((typeof sizes !== 'undefined' && sizes.length > 0) && (typeof types !== 'undefined' && types.length > 0)) {
             if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
                 if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
-                    if (nodes[i].data.isRootCloneDir === "1") {
-                        cloneRootDirs.push(nodes[i])
+                    if ((type1 && types.includes(1)) || (type2 && types.includes(2))  || (type3 && types.includes(3))) {
+                        if (nodes[i].data.isRootCloneDir === "1") {
+                            cloneRootDirs.push(nodes[i])
+                        }
                     }
                 }
             }
@@ -206,14 +221,17 @@ function generateCloneRootDirs(nodes, cloneRootDirs, moreLess, ccSize) {
     }
 }
 
-function generateCloneFiles(nodes, cloneRootDirs, moreLess, ccSize) {
+function generateCloneFiles(nodes, cloneRootDirs, moreLess, ccSize, type1, type2, type3) {
     for(let i in nodes) {
         let sizes = nodes[i].data.sizes
-        if(typeof sizes !== 'undefined') {
+        let types = nodes[i].data.types
+        if((typeof sizes !== 'undefined' && sizes.length > 0) && (typeof types !== 'undefined' && types.length > 0)) {
             if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
                 if (nodes[i] !== null && typeof (nodes[i]) == "object" && nodes[i].parent !== null && typeof (nodes[i].parent) == "object") {
-                    if (nodes[i].data.isFile === "1") {
-                        cloneRootDirs.push(nodes[i])
+                    if ((type1 && types.includes(1)) || (type2 && types.includes(2))  || (type3 && types.includes(3))) {
+                        if (nodes[i].data.isFile === "1") {
+                            cloneRootDirs.push(nodes[i])
+                        }
                     }
                 }
             }

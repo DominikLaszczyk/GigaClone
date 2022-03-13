@@ -13,30 +13,15 @@ import java.util.*;
 
 public class TextualCloneDetection extends CloneDetection {
 
-    ObservableList<FileExtended> files;
-    Set<CloneClass> cloneClasses;
-    Set<ClonePair> clonePairs;
-
-    StringBuilder finalClonesSB;
-
-
-
-    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
-    private final ReadOnlyStringWrapper message = new ReadOnlyStringWrapper();
-
     public TextualCloneDetection(ObservableList<FileExtended> files) {
-        this.files = files;
-        this.cloneClasses = new HashSet<>();
-        this.clonePairs = new HashSet<>();
+        super(files);
     }
 
     @Override
     public void detectClones() throws IOException {
         this.cloneClasses.clear();
-        this.clonePairs.clear();
 
-        double iterator = 0.0;
-
+        double progressIterator = 0.0;
 
         Set<CloneClass> tempCloneClasses = new HashSet<>();
         List<Method> allMethods = new ArrayList<>();
@@ -68,29 +53,25 @@ public class TextualCloneDetection extends CloneDetection {
                 tempCloneClasses.add(newCloneClass);
             }
 
-            iterator++;
-            progress.set(iterator/allMethods.size());
+            progressIterator++;
+            progress.set(progressIterator/allMethods.size());
         }
 
         for(CloneClass cc : tempCloneClasses) {
             if(cc.getClones().size()>1) {
                 cc.computeHighestPath();
                 this.cloneClasses.add(cc);
-
-                System.out.println(cc);
             }
         }
 
         message.set("Constructing clone file...");
 
-        finalClonesSB = new StringBuilder();
-        finalClonesSB.append("data = {\n");
+        finalClonesSB = new StringBuilder("data = {\n");
 
-        String finalClones = CloneDetection.radialTreeCloneBuilder(
+        String finalClones = this.radialTreeCloneBuilder(
             FileController.getChosenDirectory(),
             finalClonesSB,
-            this.cloneClasses,
-            progress
+            this.cloneClasses
         );
 
         finalClones += "\n};";
@@ -101,17 +82,6 @@ public class TextualCloneDetection extends CloneDetection {
 
         message.set("Done!");
     }
-
-    public ReadOnlyDoubleProperty progressProperty() {
-        return progress;
-    }
-
-    public ReadOnlyStringWrapper messageProperty() {
-        return message;
-    }
-
-
-
 }
 
 

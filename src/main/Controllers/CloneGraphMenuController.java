@@ -12,8 +12,10 @@ import javafx.scene.web.WebView;
 import main.Models.Alerts;
 import main.Models.Algorithms.TextualCloneDetection;
 import main.Models.Algorithms.CloneDetection;
+import main.Models.Algorithms.TokenCloneDetection;
 import main.Models.CloneGraph;
 import main.Models.FileExtended;
+import main.Models.Language;
 
 import java.io.*;
 import java.net.URL;
@@ -74,10 +76,14 @@ public class CloneGraphMenuController implements Initializable {
                             updateProgress(newProgress.doubleValue(), 1));
                     textCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
                             updateMessage(newMessage));
-
                     textCloneDetection.detectClones();
                 } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
-
+                    TokenCloneDetection tokenCloneDetection = new TokenCloneDetection(files);
+                    tokenCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
+                            updateProgress(newProgress.doubleValue(), 1));
+                    tokenCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
+                            updateMessage(newMessage));
+                    tokenCloneDetection.detectClones();
                 } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.AST) {
 
                 }
@@ -95,7 +101,13 @@ public class CloneGraphMenuController implements Initializable {
 
     public void showGraph() {
         CloneGraph.Type cloneGraphType = cloneGraphTypeComboBox.getValue();
-        if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
+        if(cloneDetectionAlgorithmComboBox.getValue() == null) {
+            Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
+        }
+        else if(cloneGraphType == null) {
+            Alerts.noCloneGraphTypeSelectedAlert().showAndWait();
+        }
+        else if(cloneGraphType == CloneGraph.Type.RADIALTREE) {
             loadRadialTree();
         }
         else if(cloneGraphType == CloneGraph.Type.HEB) {
@@ -112,7 +124,13 @@ public class CloneGraphMenuController implements Initializable {
         String data = null;
         String radialTree = null;
         try {
-            data = Files.readString(Paths.get("src/main/Data/textClones.js"));
+            if(cloneDetectionAlgorithmComboBox.getValue() == CloneDetection.Algorithm.TEXT) {
+                data = Files.readString(Paths.get("src/main/Data/textClones.js"));
+            }
+            else if(cloneDetectionAlgorithmComboBox.getValue() == CloneDetection.Algorithm.TOKEN) {
+                data = Files.readString(Paths.get("src/main/Data/tokenClones.js"));
+            }
+
             radialTree = Files.readString(Paths.get("src/main/CloneGraphs/RadialTree.js"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -122,7 +140,7 @@ public class CloneGraphMenuController implements Initializable {
         engine.executeScript(radialTree);
         engine.executeScript(data);
 
-        System.out.println("printRadialTree(" +
+        String script = "printRadialTree(" +
                 displayDirNamesCheckBox.isSelected() + "," +
                 displayNodesCheckBox.isSelected() + "," +
                 displayFileNamesCheckBox.isSelected() + "," +
@@ -131,20 +149,11 @@ public class CloneGraphMenuController implements Initializable {
                 cloneType3CheckBox.isSelected() + "," +
                 "\"" + ccSizeMoreLessComboBox.getValue() + "\"" + "," +
                 (int)ccSizeSlider.getValue() +
-                ")");
+                ")";
 
-        engine.executeScript(
-                "printRadialTree(" +
-                        displayDirNamesCheckBox.isSelected() + "," +
-                        displayNodesCheckBox.isSelected() + "," +
-                        displayFileNamesCheckBox.isSelected() + "," +
-                        cloneType1CheckBox.isSelected() + "," +
-                        cloneType2CheckBox.isSelected() + "," +
-                        cloneType3CheckBox.isSelected() + "," +
-                        "\"" + ccSizeMoreLessComboBox.getValue() + "\"" + "," +
-                        (int)ccSizeSlider.getValue() +
-                        ")"
-        );
+        System.out.println(script);
+
+        engine.executeScript(script);
 
     }
 

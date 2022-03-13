@@ -19,5 +19,8 @@ public class Strings {
     public static final String NO_CLONE_DETECTION_ALGORITHM_SELECTED_HEADER_TEXT = "No Algorithm selected!";
     public static final String NO_CLONE_DETECTION_ALGORITHM_SELECTED_CONTENT_TEXT = "Please select a Clone Detection Algorithm.";
 
+    public static final String NO_CLONE_GRAPH_TYPE_SELECTED_HEADER_TEXT = "No Clone Graph type selected!";
+    public static final String NO_CLONE_GRAPH_TYPE_SELECTED_CONTENT_TEXT = "Please select a Clone Graph type.";
+
 
 }
