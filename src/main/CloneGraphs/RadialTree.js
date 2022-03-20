@@ -135,7 +135,6 @@ function printRadialTree(
             generateCloneFiles(root.descendants(), nodesWithText, moreLess, ccSize, type1, type2, type3);
         }
 
-
         svg
             .append('g')
             .attr('font-family', 'sans-serif')

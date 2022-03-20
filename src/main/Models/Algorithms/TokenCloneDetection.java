@@ -117,6 +117,16 @@ public class TokenCloneDetection extends CloneDetection {
             out.println(finalClones);
         }
 
+        message.set("Constructing clone file 2...");
+
+        String arrayClones = this.arrayCloneBuilder(this.cloneClasses);
+
+        try (PrintWriter out = new PrintWriter("src/main/Data/tokenClonesArray.js")) {
+            out.println(arrayClones);
+        }
+
+        message.set("Done!");
+
         message.set("Done!");
     }
 

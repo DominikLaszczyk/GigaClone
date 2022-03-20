@@ -75,9 +75,9 @@ public abstract class CloneDetection {
             File currentCloneFile = cloneFilesIds.get(k);
 
             labels
-                    .append("\"")
-                    .append(currentCloneFile.getName())
-                    .append("\",");
+                .append("\"")
+                .append(currentCloneFile.getName())
+                .append("\",");
 
             for(CloneClass cc : cloneClasses) {
                 List<Method> clonesInCurrentCC = cc.getClones();
@@ -93,11 +93,14 @@ public abstract class CloneDetection {
                 if(isInCC) {
                     for(Method clone : clonesInCurrentCC) {
                         finalClones
-                                .append("[")
-                                .append(k)
-                                .append(",")
-                                .append(cloneFilesIdsRev.get(clone.getFile()))
-                                .append("],");
+                                .append("{")
+                                .append("fileIndex1: ").append(k).append(",")
+                                .append("fileIndex2: ").append(cloneFilesIdsRev.get(clone.getFile())).append(",")
+                                .append("fileName1: '").append(currentCloneFile.getName()).append("',")
+                                .append("fileName2: '").append(clone.getFile().getName()).append("',")
+                                .append("type: ").append(cc.getType()).append(", ")
+                                .append("size: ").append(clonesInCurrentCC.size())
+                                .append("},\n");
                     }
                 }
             }
@@ -111,8 +114,6 @@ public abstract class CloneDetection {
 
         System.out.println(finalClones);
         System.out.println(labels);
-
-
 
         return labels + "\n" + finalClones;
     }
