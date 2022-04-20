@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane fx:id="cloneVisAnchorPane" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.Controllers.CloneVisController">
+   <children>
+      <SplitPane fx:id="cloneVisSplitPane" orientation="VERTICAL" prefHeight="700.0" prefWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <HBox maxHeight="35.0" minHeight="35.0" spacing="30.0">
+               <children>
+                  <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" text="Go Back" />
+                  <Button mnemonicParsing="false" onAction="#addGraph" text="Add Clone Graph" />
+                  <Button mnemonicParsing="false" onAction="#removeGraph" text="Remove Clone Graph" />
+               </children>
+               <padding>
+                  <Insets left="20.0" top="5.0" />
+               </padding>
+            </HBox>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
