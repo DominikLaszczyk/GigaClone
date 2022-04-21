@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import project.Controllers.FileController;
 import project.Models.CloneClass;
+import project.Models.ClonePair;
 import project.Models.FileExtended;
 import project.Models.Method;
 
@@ -34,6 +35,8 @@ public abstract class CloneDetection {
 
     public Double fileCounter = 0.0;
 
+    private int maxFileHierarchySize = 0;
+
     protected ObservableList<FileExtended> files;
     protected Set<CloneClass> cloneClasses;
     protected StringBuilder finalClonesSB;
@@ -46,6 +49,7 @@ public abstract class CloneDetection {
     public CloneDetection(ObservableList<FileExtended> files) {
         this.files = files;
         this.cloneClasses = new HashSet<>();
+        this.maxFileHierarchySize = 0;
     }
 
     protected String arrayCloneBuilder(Set<CloneClass> cloneClasses) {
@@ -55,6 +59,7 @@ public abstract class CloneDetection {
         Integer id = 0;
         HashMap<Integer, File> cloneFilesIds = new HashMap<>();
         HashMap<File, Integer> cloneFilesIdsRev = new HashMap<>();
+        ArrayList<ClonePair> clonePairs = new ArrayList<>();
 
         for(CloneClass cc : cloneClasses) {
             for(Method clone : cc.getClones()) {
@@ -66,7 +71,7 @@ public abstract class CloneDetection {
             }
         }
 
-        for(Integer k=0; k<id; k++) {
+        for(int k = 0; k<id; k++) {
             File currentCloneFile = cloneFilesIds.get(k);
 
             labels
@@ -87,19 +92,44 @@ public abstract class CloneDetection {
 
                 if(isInCC) {
                     for(Method clone : clonesInCurrentCC) {
-                        finalClones
-                                .append("{")
-                                .append("fileIndex1: ").append(k).append(",")
-                                .append("fileIndex2: ").append(cloneFilesIdsRev.get(clone.getFile())).append(",")
-                                .append("fileName1: '").append(currentCloneFile.getName()).append("',")
-                                .append("fileName2: '").append(clone.getFile().getName()).append("',")
-                                .append("type: ").append(cc.getType()).append(", ")
-                                .append("size: ").append(clonesInCurrentCC.size())
-                                .append("},\n");
+                        ClonePair cp = new ClonePair(
+                                k,
+                                cloneFilesIdsRev.get(clone.getFile()),
+                                currentCloneFile.getName(),
+                                clone.getFile().getName(),
+                                Integer.parseInt(cc.getType().toString()),
+                                clonesInCurrentCC.size()
+                        );
+
+                        clonePairs.add(cp);
                     }
                 }
             }
         }
+
+        ArrayList<Integer> clonePairsToDelete = new ArrayList<>();
+        for(int i=0; i<clonePairs.size()-1; i++) {
+            for(int j=i+1; j<clonePairs.size(); j++) {
+                if(clonePairs.get(i).sameFiles(clonePairs.get(j))) {
+                    clonePairs.get(i).setSize(clonePairs.get(i).getSize() + clonePairs.get(j).getSize());
+                    Integer clonePairIndex = j;
+                    clonePairsToDelete.add(clonePairIndex);
+                }
+            }
+        }
+
+        for(int i=clonePairs.size()-1; i>=0; i--) {
+            if(clonePairsToDelete.contains(i)) {
+                clonePairs.remove(i);
+            }
+        }
+
+        int maxSize = 0;
+        for(ClonePair cp : clonePairs) {
+            finalClones.append(cp.toJSON()).append(",\n");
+            if(cp.getSize()>maxSize) maxSize = cp.getSize();
+        }
+
 
         if(finalClones.charAt(finalClones.length()-1) == ',') { finalClones.setLength(finalClones.length() - 1); }
         finalClones.append("]");
@@ -107,7 +137,11 @@ public abstract class CloneDetection {
         if(labels.charAt(labels.length()-1) == ',') { labels.setLength(labels.length() - 1); }
         labels.append("]");
 
-        return labels + "\n" + finalClones;
+        String maxSizeString = "maxSize = " + maxSize + "\n";
+
+        String highestFileIndex = "highestFileIndex = " + id + "\n";
+
+        return highestFileIndex + maxSizeString + labels + "\n" + finalClones;
     }
 
     protected String radialTreeCloneBuilder(
@@ -125,8 +159,8 @@ public abstract class CloneDetection {
 
             boolean areRelated = false;
             boolean isRootCloneDirectory = false;
-            CloneClass.Type dirCloneType = null;
             StringBuilder ccSizes = new StringBuilder("[");
+            int sizesSum = 0;
             StringBuilder dirCloneTypes = new StringBuilder("[");
             for(CloneClass cc : cloneClasses) {
                 //check if current directory is the root clone directory
@@ -134,6 +168,7 @@ public abstract class CloneDetection {
                     isRootCloneDirectory = true;
                     dirCloneTypes.append(cc.getType()).append(",");
                     ccSizes.append(cc.getClones().size()).append(",");
+                    sizesSum += cc.getClones().size();
                 }
 
                 for(Method clone : cc.getClones()) {
@@ -148,13 +183,13 @@ public abstract class CloneDetection {
             }
             if(ccSizes.charAt(ccSizes.length()-1) == ',') { ccSizes.setLength(ccSizes.length() - 1); }
             ccSizes.append("]");
-
             if(dirCloneTypes.charAt(dirCloneTypes.length()-1) == ',') { dirCloneTypes.setLength(dirCloneTypes.length() - 1); }
             dirCloneTypes.append("]");
 
             if(areRelated || isRootCloneDirectory) {
                 finalClones.append("types: ").append(dirCloneTypes).append(",\n");
                 finalClones.append("sizes: ").append(ccSizes).append(",\n");
+                finalClones.append("sizesSum: ").append(sizesSum).append(",\n");
             }
 
             if(areRelated) { finalClones.append("isClone: '").append("1").append("',\n"); }
@@ -162,6 +197,9 @@ public abstract class CloneDetection {
 
             finalClones.append("children:\n");
             finalClones.append("[\n");
+
+            if(sizesSum > maxFileHierarchySize) maxFileHierarchySize = sizesSum;
+
             for(File child : children) {
 
                 finalClones.append("{");
@@ -176,6 +214,7 @@ public abstract class CloneDetection {
 
                     boolean isClone = false;
                     StringBuilder fileCcSizes = new StringBuilder("[");
+                    int fileSizesSum = 0;
                     StringBuilder fileCloneTypes= new StringBuilder("[");
                     for(CloneClass cc : cloneClasses) {
                         for(Method clone : cc.getClones()) {
@@ -183,6 +222,7 @@ public abstract class CloneDetection {
                                 isClone = true;
                                 fileCloneTypes.append(cc.getType()).append(",");
                                 fileCcSizes.append(cc.getClones().size()).append(",");
+                                fileSizesSum += cc.getClones().size();
                             }
                         }
                     }
@@ -197,6 +237,7 @@ public abstract class CloneDetection {
                         finalClones.append("name: '").append(fileName).append("',\n");
                         finalClones.append("types: ").append(fileCloneTypes).append(",\n");
                         finalClones.append("sizes: ").append(fileCcSizes).append(",\n");
+                        finalClones.append("sizesSum: ").append(fileSizesSum).append(",\n");
                         finalClones.append("isFile: '").append("1").append("',\n");
                         finalClones.append("isClone: '").append("1").append("'\n");
                     }
@@ -205,6 +246,8 @@ public abstract class CloneDetection {
                         finalClones.append("isFile: '").append("0").append("',\n");
                         finalClones.append("isClone: '").append("0").append("'\n");
                     }
+
+                    if(sizesSum > maxFileHierarchySize) maxFileHierarchySize = sizesSum;
                 }
 
                 if(!child.isDirectory()) {
@@ -215,12 +258,12 @@ public abstract class CloneDetection {
 
                 finalClones.append("},");
             }
-            finalClones.append("\n],\n");
+            finalClones.append("\n]\n");
         }
 
+        String maxSize = "maxSize = " + maxFileHierarchySize;
 
-
-        return finalClones.toString();
+        return finalClones.toString() + "\n};" + maxSize;
     }
 
     public ReadOnlyDoubleProperty progressProperty() {

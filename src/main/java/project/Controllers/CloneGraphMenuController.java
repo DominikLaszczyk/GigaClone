@@ -51,6 +51,8 @@ public class CloneGraphMenuController implements Initializable {
     @FXML
     private Label cloneDetectionProgressLabel;
     @FXML
+    private CheckBox colourCodeCloneSizeCheckBox;
+    @FXML
     private CheckBox displayDirNamesCheckBox;
     @FXML
     private CheckBox displayNodesCheckBox;
@@ -173,6 +175,7 @@ public class CloneGraphMenuController implements Initializable {
             engine.executeScript(data);
 
             script +=
+                    colourCodeCloneSizeCheckBox.isSelected() + "," +
                     displayDirNamesCheckBox.isSelected() + "," +
                     displayNodesCheckBox.isSelected() + "," +
                     displayFileNamesCheckBox.isSelected() + "," +

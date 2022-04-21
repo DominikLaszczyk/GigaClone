@@ -108,8 +108,6 @@ public class TokenCloneDetection extends CloneDetection {
                 this.cloneClasses
         );
 
-        finalClones += "\n};";
-
         try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesHierarchy.js")) {
             out.println(finalClones);
         }

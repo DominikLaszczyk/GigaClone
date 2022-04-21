@@ -1,4 +1,5 @@
 function printRadialTree(
+    cloneSizeColourCoding,
     displayDirNames,
     displayNodes,
     displayFileNames,
@@ -36,7 +37,9 @@ function printRadialTree(
         type2,
         type3,
         moreLess,
-        ccSize
+        ccSize,
+        maxSize,
+        cloneSizeColourCoding
     );
 
 
@@ -169,10 +172,11 @@ function printRadialTree(
 }
 
 
-function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
+function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize, maxSize, cloneSizeColourCoding) {
     for(let i in nodes) {
         let sizes = nodes[i].data.sizes
         let types = nodes[i].data.types
+        let sizesSum = nodes[i].data.sizesSum
         if((typeof sizes !== 'undefined' && sizes.length > 0) && (typeof types !== 'undefined' && types.length > 0)) {
             if ((moreLess === "More than" && sizes.some(el => el > ccSize)) || (moreLess === "Less than" && sizes.some(el => el < ccSize))) {
                 if ((type1 && types.includes(1)) || (type2 && types.includes(2))  || (type3 && types.includes(3))) {
@@ -182,18 +186,37 @@ function generateLinks(nodes, links, type1, type2, type3, moreLess, ccSize) {
                                 source: nodes[i].parent,
                                 target: nodes[i],
                                 width: "3.0",
-                                sizes:sizes
+                                sizes: sizes,
+                                sizesSum: sizesSum
                             }
 
-                            if (type1 && types.includes(1)) {
-                                link.colour = "orange";
+                            if(cloneSizeColourCoding) {
+                                let r = (255 * sizesSum)/maxSize
+                                let g = (255 * (maxSize - sizesSum)) / maxSize
+                                let b = 0;
+
+                                let rgb = "rgb(" + r + "," + g + "," + b + ")"
+
+                                if((type1 && types.includes(1)) ||
+                                    (type2 && types.includes(2)) ||
+                                    (type3 && types.includes(3))) {
+
+                                    link.colour = rgb
+                                }
                             }
-                            else if(type2 && types.includes(2)) {
-                                link.colour = "blue";
+                            else {
+                                if (type1 && types.includes(1)) {
+                                    link.colour = "orange";
+                                }
+                                else if(type2 && types.includes(2)) {
+                                    link.colour = "blue";
+                                }
+                                else if(type3 && types.includes(3)) {
+                                    link.colour = "green";
+                                }
                             }
-                            else if(type3 && types.includes(3)) {
-                                link.colour = "green";
-                            }
+
+
 
                             links.push(link)
                         }

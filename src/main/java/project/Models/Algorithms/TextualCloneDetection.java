@@ -73,8 +73,6 @@ public class TextualCloneDetection extends CloneDetection {
             this.cloneClasses
         );
 
-        hierarchyClones += "\n};";
-
         try (PrintWriter out = new PrintWriter("src/main/java/project/Data/textClonesHierarchy.js")) {
             out.println(hierarchyClones);
         }

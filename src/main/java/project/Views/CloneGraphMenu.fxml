@@ -34,7 +34,6 @@
             <Button fx:id="killTaskButton" mnemonicParsing="false" text="Kill task" />
          </children>
       </FlowPane>
-      <ComboBox fx:id="cloneGraphTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="Clone Graph Type" GridPane.rowIndex="2" />
       <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="3">
          <children>
             <CheckBox fx:id="displayDirNamesCheckBox" mnemonicParsing="false" text="Display directory names" />
@@ -58,7 +57,7 @@
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="25.0" prefHeight="33.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Slider fx:id="ccSizeSlider" max="30.0" maxWidth="1.7976931348623157E308" min="1.0" minWidth="10.0" value="1.0">
+            <Slider fx:id="ccSizeSlider" maxWidth="1.7976931348623157E308" min="1.0" minWidth="10.0" value="1.0">
                <padding>
                   <Insets left="10.0" right="10.0" top="5.0" />
                </padding>
@@ -111,6 +110,12 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </FlowPane.margin>
             </Button>
+         </children>
+      </FlowPane>
+      <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2">
+         <children>
+            <ComboBox fx:id="cloneGraphTypeComboBox" prefHeight="25.0" prefWidth="138.0" promptText="Clone Graph Type" />
+            <CheckBox fx:id="colourCodeCloneSizeCheckBox" mnemonicParsing="false" text="Colour code clone size" />
          </children>
       </FlowPane>
    </children>
