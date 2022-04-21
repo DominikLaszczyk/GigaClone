@@ -70,7 +70,7 @@ function printScatterPlot(
         .append("circle")
         .attr("cx", function (d) { return xScale(d.fileIndex1); } )
         .attr("cy", function (d) { return yScale(d.fileIndex2); } )
-        .attr("r", document.body.clientHeight/2/highestFileIndex)
+        .attr("r", screen.height/2.7/highestFileIndex)
         .attr("transform", "translate(" + 0 + "," + 0 + ")")
         .style("fill", function (e) {return e.colour;})
         .on("mouseover", function(event, d) {
