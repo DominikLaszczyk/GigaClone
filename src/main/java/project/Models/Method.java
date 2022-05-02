@@ -27,7 +27,9 @@ public class Method extends ParserRuleContext {
 
     @Override
     public boolean equals(Object object) {
-        return object instanceof Method && this.parserRuleContext.getText().equals(((Method)object).getParserRuleContext().getText());
+        return object instanceof Method &&
+                this.parserRuleContext.getText().equals(((Method)object).getParserRuleContext().getText()) &&
+                this.file == ((Method) object).file;
     }
 
     @Override

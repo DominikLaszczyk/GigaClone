@@ -59,8 +59,9 @@ public abstract class CloneDetection {
         Set<Method> methodsType1 = new HashSet<>();
         Set<Method> methodsType2 = new HashSet<>();
         Set<Method> methodsType3 = new HashSet<>();
-        Set<Method> allMethods = new HashSet<>();
+        Set<Method> cloneMethods = new HashSet<>();
         Set<FileExtended> filesWithClones = new HashSet<>();
+        int allMethodsCount = 0;
 
         //calculate number of methods for every clone type
         for(CloneClass cc : cloneClasses) {
@@ -75,6 +76,7 @@ public abstract class CloneDetection {
                     methodsType3.addAll(cc.getClones());
                     break;
             }
+            cloneMethods.addAll(cc.getClones());
 
             for(Method clone : cc.getClones()) {
                 filesWithClones.add(clone.getFile());
@@ -83,13 +85,17 @@ public abstract class CloneDetection {
 
         //calculate number of methods in the whole system
         for(FileExtended file : files) {
-            allMethods.addAll(file.getMethods());
+            allMethodsCount += file.getMethods().size();
         }
 
-        System.out.println("Type 1 %: " + (double)methodsType1.size()/(double)allMethods.size()*100.0);
-        System.out.println("Type 2 %: " + (double)methodsType2.size()/(double)allMethods.size()*100.0);
-        System.out.println("Type 3 %: " + (double)methodsType3.size()/(double)allMethods.size()*100.0);
+        System.out.println("-----------------------------------");
+
+        System.out.println("All types %: " + (double)cloneMethods.size()/(double)allMethodsCount*100.0);
+        System.out.println("Type 1 %: " + (double)methodsType1.size()/(double)allMethodsCount*100.0);
+        System.out.println("Type 2 %: " + (double)methodsType2.size()/(double)allMethodsCount*100.0);
+        System.out.println("Type 3 %: " + (double)methodsType3.size()/(double)allMethodsCount*100.0);
         System.out.println("Files with clones %: " + (double)filesWithClones.size()/(double)files.size()*100.0);
+        System.out.println("-----------------------------------");
     }
 
     protected ArrayList<String> getTokenSymbolicNameList(Lexer lexer) {
