@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -31,10 +30,7 @@
       <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0">
          <children>
             <ComboBox fx:id="cloneDetectionAlgorithmComboBox" minWidth="10.0" prefHeight="25.0" prefWidth="138.0" promptText="Clone Detection Algorithm" />
-            <Button fx:id="detectClonesButton" mnemonicParsing="false" onAction="#detectClones" text="Detect Clones">
-               <tooltip>
-                  <Tooltip text="Empty Tooltip" />
-               </tooltip></Button>
+            <Button fx:id="detectClonesButton" mnemonicParsing="false" onAction="#detectClones" text="Detect Clones" />
             <Button fx:id="killTaskButton" mnemonicParsing="false" text="Kill task" />
          </children>
       </FlowPane>
@@ -114,7 +110,6 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </FlowPane.margin>
             </Button>
-            <Button fx:id="showInfoButton" mnemonicParsing="false" text="Show info" />
          </children>
       </FlowPane>
       <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="2">

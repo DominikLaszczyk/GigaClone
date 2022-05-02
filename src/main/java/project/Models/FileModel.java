@@ -1,5 +1,6 @@
 package project.Models;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 public class FileModel {
     private ArrayList<FileExtended> fileList = new ArrayList<>();
     private ObservableList<FileExtended> finalFileList = FXCollections.observableArrayList();
+    private final ReadOnlyStringWrapper message = new ReadOnlyStringWrapper();
 
 
     //fill fileList with files based on given directory and language
@@ -22,7 +24,7 @@ public class FileModel {
         //loop over all the nodes in the tree starting from given root
         if(children != null) {
 
-            for(File child: children) {
+            for(File child : children) {
                 String fileName = child.getName();
 
                 TreeItem<File> newNodeFile = new TreeItem<>(child);
@@ -41,6 +43,7 @@ public class FileModel {
 
                 if(!child.isDirectory()) {
                     FileController.numOfFiles++;
+                    message.set("Loaded files: " + FileController.numOfFiles);
                 }
             }
         }
@@ -62,5 +65,9 @@ public class FileModel {
 
     public ObservableList<FileExtended> getFinalFileList() {
         return this.finalFileList;
+    }
+
+    public ReadOnlyStringWrapper messageProperty() {
+        return message;
     }
 }

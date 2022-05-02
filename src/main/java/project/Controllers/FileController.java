@@ -1,5 +1,6 @@
 package project.Controllers;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -33,6 +34,8 @@ public class FileController implements Initializable {
     public static Language chosenLanguage;
     ObservableList<FileExtended> tableFiles = FXCollections.observableArrayList();
     public static int numOfFiles;
+    Task<Void> extractMethodsTask;
+    Task<Void> loadFilesTask;
 
     @FXML
     private BorderPane fileOptionsBorderPane;
@@ -58,8 +61,10 @@ public class FileController implements Initializable {
     private TableColumn<FileExtended, String> locColumn;
     @FXML
     private TableColumn<FileExtended, String> filePathColumn;
+    @FXML
+    private Label loadedFilesLabel;
 
-    Task<Void> extractMethodsTask;
+
 
     public void chooseDirectory() {
         //create new window for choosing the project root directory
@@ -81,28 +86,43 @@ public class FileController implements Initializable {
         chosenLanguage = chooseLangComboBox.getValue();
     }
 
-    public void loadFilesInTableView() throws IOException {
-        numOfFiles = 0;
-        if(chosenDirectory != null && chosenLanguage != null) {
-            fileModel.getFileList().clear();
+    public void loadFilesInTableView() {
+        loadFilesTask = new Task<>() {
+            @Override
+            public Void call() throws Exception {
+                numOfFiles = 0;
+                if(chosenDirectory != null && chosenLanguage != null) {
 
-            //get all the files in the chosen directory, that were written in the chosen language
-            Boolean filesExist = fileModel.loadFiles(chosenDirectory, chosenLanguage, allIncludedCheckBox.isSelected());
+                    fileModel.messageProperty().addListener((obs, oldMessage, newMessage) ->
+                            updateMessage(newMessage));
 
-            //load files to table view
-            if (filesExist) {
-                //clear table
-                tableFiles.clear();
-                filesTableView.getItems().clear();
+                    fileModel.getFileList().clear();
 
-                //load table view with new files
-                tableFiles.addAll(fileModel.getFileList());
-                filesTableView.setItems(tableFiles);
+
+                    //get all the files in the chosen directory, that were written in the chosen language
+                    Boolean filesExist = fileModel.loadFiles(chosenDirectory, chosenLanguage, allIncludedCheckBox.isSelected());
+
+                    //load files to table view
+                    if (filesExist) {
+                        //clear table
+                        tableFiles.clear();
+                        filesTableView.getItems().clear();
+
+                        //load table view with new files
+                        tableFiles.addAll(fileModel.getFileList());
+                        filesTableView.setItems(tableFiles);
+                    }
+                }
+                else {
+                    Alerts.getNoDirOrLangChosenAlert().showAndWait();
+                }
+
+                return null;
             }
-        }
-        else {
-            Alerts.getNoDirOrLangChosenAlert().showAndWait();
-        }
+        };
+
+        loadedFilesLabel.textProperty().bind(loadFilesTask.messageProperty());
+        new Thread(loadFilesTask).start();
     }
 
     public void proceed() {

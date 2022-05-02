@@ -43,9 +43,9 @@
                         <RowConstraints maxHeight="122.0" minHeight="10.0" prefHeight="63.0" valignment="CENTER" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="149.0" minHeight="10.0" prefHeight="46.0" valignment="CENTER" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="243.0" minHeight="0.0" prefHeight="42.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="345.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="328.0" minHeight="10.0" prefHeight="265.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="345.0" minHeight="10.0" prefHeight="59.19999999999999" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="328.0" minHeight="10.0" prefHeight="27.999975585937477" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="300.8000244140624" minHeight="10.0" prefHeight="300.8000244140624" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
@@ -81,6 +81,14 @@
                            </font>
                         </Button>
                         <Label fx:id="directoryChosenLabel" text="No directory chosen" textFill="#ff0101" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="loadedFilesLabel" text="Loaded files: 0" GridPane.rowIndex="6">
                            <GridPane.margin>
                               <Insets left="10.0" />
                            </GridPane.margin>
