@@ -1,5 +1,6 @@
 package project.Models;
 
+import org.antlr.v4.runtime.CharStream;
 import project.Models.Algorithms.ParseTreeCloneDetection;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -11,10 +12,12 @@ public class Method extends ParserRuleContext {
     private FileExtended file;
     private List<ParseTreeCloneDetection.ParseTreeExtended> subTrees;
     private int numOfParseTreeNodes;
+    private CharStream charStream;
 
-    public Method(ParserRuleContext parserRuleContext, FileExtended file) {
+    public Method(ParserRuleContext parserRuleContext, FileExtended file, CharStream charStream) {
         this.parserRuleContext = parserRuleContext;
         this.file = file;
+        this.charStream = charStream;
     }
 
     @Override
@@ -68,5 +71,9 @@ public class Method extends ParserRuleContext {
 
     public int getNumOfParseTreeNodes() {
         return this.numOfParseTreeNodes;
+    }
+
+    public CharStream getCharStream() {
+        return this.charStream;
     }
 }

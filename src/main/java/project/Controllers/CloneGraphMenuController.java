@@ -87,6 +87,7 @@ public class CloneGraphMenuController implements Initializable {
                     textCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
                             updateMessage(newMessage));
                     textCloneDetection.detectClones();
+                    textCloneDetection.calculateClonePercentage();
                 } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
                     TokenCloneDetection tokenCloneDetection = new TokenCloneDetection(files);
                     tokenCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
@@ -94,6 +95,7 @@ public class CloneGraphMenuController implements Initializable {
                     tokenCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
                             updateMessage(newMessage));
                     tokenCloneDetection.detectClones();
+                    tokenCloneDetection.calculateClonePercentage();
                 } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.PARSE_TREE) {
                     ParseTreeCloneDetection parseTreeCloneDetection = new ParseTreeCloneDetection(files);
                     parseTreeCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
@@ -101,6 +103,7 @@ public class CloneGraphMenuController implements Initializable {
                     parseTreeCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
                             updateMessage(newMessage));
                     parseTreeCloneDetection.detectClones();
+                    parseTreeCloneDetection.calculateClonePercentage();
                 }
 
                 return null;
@@ -249,5 +252,6 @@ public class CloneGraphMenuController implements Initializable {
         ccSizeMoreLessComboBox.getSelectionModel().select(0);
 
         ccSizeLabel.textProperty().bind(ccSizeSlider.valueProperty().asString("%.0f clones"));
+
     }
 }

@@ -126,13 +126,5 @@ public class TokenCloneDetection extends CloneDetection {
     }
 
 
-    private ArrayList<String> getTokenSymbolicNameList(Lexer lexer) {
-        ArrayList<String> tokens = new ArrayList<>();
-        for (Token token = lexer.nextToken(); token.getType() != Token.EOF; token = lexer.nextToken()) {
-            String symbolicName;
-            symbolicName = lexer.getVocabulary().getSymbolicName(token.getType());
-            tokens.add(symbolicName);
-        }
-        return tokens;
-    }
+
 }

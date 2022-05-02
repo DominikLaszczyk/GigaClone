@@ -50,7 +50,7 @@ public class FileExtended extends File{
 
             Java8Parser parser = new Java8Parser(commonTokenStream);
             Java8Parser.CompilationUnitContext tree = parser.compilationUnit(); // parse a compilationUnit
-            JavaListener extractor = new JavaListener(file);
+            JavaListener extractor = new JavaListener(file, charStream);
 
             ParseTreeWalker.DEFAULT.walk(extractor, tree);
 
@@ -63,7 +63,7 @@ public class FileExtended extends File{
 
             CPP14Parser parser = new CPP14Parser(commonTokenStream);
             //CPP14Parser.TranslationUnitContext = parser.translationUnit(); // parse a compilationUnit
-            CppListener extractor = new CppListener(file);
+            CppListener extractor = new CppListener(file, charStream);
 
 
             ParseTreeWalker.DEFAULT.walk(extractor, parser.translationUnit());
@@ -79,10 +79,11 @@ public class FileExtended extends File{
 
         private final ArrayList<Method> methods = new ArrayList<>();
         private final FileExtended file;
+        private final CharStream charStream;
 
-        public JavaListener(FileExtended file ) {
+        public JavaListener(FileExtended file, CharStream charStream) {
             super();
-
+            this.charStream = charStream;
             this.file = file;
         }
 
@@ -91,7 +92,7 @@ public class FileExtended extends File{
             super.enterMethodDeclaration(ctx);
 
             if(ctx.start != null) {
-                this.methods.add(new Method(ctx, this.file));
+                this.methods.add(new Method(ctx, this.file, charStream));
             }
         }
     }
@@ -100,10 +101,11 @@ public class FileExtended extends File{
 
         private final ArrayList<Method> methods = new ArrayList<>();
         private final FileExtended file;
+        private final CharStream charStream;
 
-        public CppListener(FileExtended file ) {
+        public CppListener(FileExtended file, CharStream charStream) {
             super();
-
+            this.charStream = charStream;
             this.file = file;
         }
 
@@ -111,7 +113,7 @@ public class FileExtended extends File{
         public void enterFunctionDefinition(CPP14Parser.FunctionDefinitionContext ctx) {
             super.enterFunctionDefinition(ctx);
             if(ctx.start != null) {
-                this.methods.add(new Method(ctx, this.file));
+                this.methods.add(new Method(ctx, this.file,charStream));
             }
         }
     }

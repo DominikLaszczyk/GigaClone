@@ -1,9 +1,16 @@
 package project.Models.Algorithms;
 
 import javafx.collections.ObservableList;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import project.ANTLR.Java.Java8Lexer;
 import project.Controllers.FileController;
 import project.Models.CloneClass;
 import project.Models.FileExtended;
+import project.Models.Language;
 import project.Models.Method;
 
 import java.io.IOException;
@@ -39,7 +46,10 @@ public class TextualCloneDetection extends CloneDetection {
             for(CloneClass currentCloneClass : tempCloneClasses) {
                 //get one of the methods in the clone class
                 Method methodInCC = currentCloneClass.getCloneMethod();
-                if(currentMethod.equals(methodInCC)) {
+
+                Double jScore = calculateJaccardScore(currentMethod, methodInCC);
+
+                if(jScore > 0.7) {
                     currentCloneClass.addClone(currentMethod);
                     belongsToCC = true;
                     break;
@@ -47,7 +57,7 @@ public class TextualCloneDetection extends CloneDetection {
             }
 
             if(!belongsToCC) {
-                CloneClass newCloneClass = new CloneClass(currentMethod, CloneClass.Type.ONE);
+                CloneClass newCloneClass = new CloneClass(currentMethod, CloneClass.Type.THREE);
                 newCloneClass.addClone(currentMethod);
                 tempCloneClasses.add(newCloneClass);
             }
@@ -61,6 +71,21 @@ public class TextualCloneDetection extends CloneDetection {
                 cc.computeHighestPath();
                 this.cloneClasses.add(cc);
             }
+        }
+
+        for(CloneClass cc : this.cloneClasses) {
+            boolean isType1 = true;
+            List<Method> clones = cc.getClones();
+            for(int i=0; i<clones.size()-1; i++) {
+                for(int j=i+1; j<clones.size(); j++) {
+                    if(!clones.get(i).equals(clones.get(j))) {
+                        isType1 = false;
+                        break;
+                    }
+                }
+            }
+
+            if(isType1) { cc.setType(CloneClass.Type.ONE); }
         }
 
         message.set("Constructing clone file 1...");
@@ -87,6 +112,8 @@ public class TextualCloneDetection extends CloneDetection {
 
         message.set("Done!");
     }
+
+
 }
 
 
