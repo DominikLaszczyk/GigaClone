@@ -111,16 +111,18 @@ public class CloneGraphMenuController implements Initializable {
                     HierarchyCloneBuilder hierarchyCloneBuilder = new HierarchyCloneBuilder(cloneClasses);
 
                     cloneDetection.setMessage("Constructing clone file 1...");
+                    String hierarchyClones = hierarchyCloneBuilder.buildClones(cloneClasses);
+                    try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesHierarchy.js")) {
+                        out.println(hierarchyClones);
+                    }
+
+                    cloneDetection.setMessage("Constructing clone file 2...");
                     String arrayClones = arrayCloneBuilder.buildClones(cloneClasses);
                     try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesArray.js")) {
                         out.println(arrayClones);
                     }
 
-                    cloneDetection.setMessage("Constructing clone file 2...");
-                    String hierarchyClones = hierarchyCloneBuilder.buildClones(cloneClasses);
-                    try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesHierarchy.js")) {
-                        out.println(hierarchyClones);
-                    }
+
 
                     cloneDetection.setMessage("Done!");
 
