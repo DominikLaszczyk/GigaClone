@@ -48,6 +48,10 @@ function printRadialTree(
         .attr("class", "tooltip-donut")
         .style("opacity", 0);
 
+    var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip-donut")
+        .style("opacity", 0);
+
 
     var radialLine = d3.lineRadial()
         .curve(d3.curveBundle.beta(0.85))
@@ -140,6 +144,7 @@ function printRadialTree(
             generateCloneFiles(root.descendants(), nodesWithText, moreLess, ccSize, type1, type2, type3);
         }
 
+
         svg
             .append('g')
             .attr('font-family', 'sans-serif')
@@ -147,7 +152,6 @@ function printRadialTree(
             .attr('stroke-linejoin', 'round')
             .attr('stroke-width', 3)
             .selectAll('text')
-            //.data(root.descendants())
             .data(nodesWithText)
             .join('text')
             .attr(
@@ -166,7 +170,39 @@ function printRadialTree(
             .text((d) => d.data.name)
             .clone(true)
             .lower()
-            .attr('stroke', 'white');
+            .attr('stroke', 'white')
+            ;
+
+        svg.on("mouseover", function(event,d) {
+            alert("BOI1")
+             d3.select(this).selectAll('text')
+                 .on('mouseover', function(event, d) {
+                     if(d.data.fullDirName != null) {
+
+                             //Makes the new div appear on hover:
+                             div.transition()
+                                 .duration(50)
+                                 .style("opacity", 1);
+                             div.html(d.data.fullDirName)
+                                 .style("left", (event.pageX) + "px")
+                                 .style("top", (event.pageY - 28) + "px");
+
+                         // .on('mouseout', function (d) {
+                         //     d3.select(this).style("stroke", function (e) {return e.colour;});
+                         //     d3.select(this).style("stroke-width", function (e) {return e.width;});
+                         //     div.transition()
+                         //         .duration(500)
+                         //         .style("opacity", 0);
+                         // })
+                     }
+
+                 })
+                 .on('mouseout', function(event, d) {
+                         div.transition()
+                             .duration(500)
+                             .style("opacity", 0);
+                 })
+        });
     }
 
 }

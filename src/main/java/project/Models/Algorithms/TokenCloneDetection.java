@@ -23,7 +23,7 @@ public class TokenCloneDetection extends CloneDetection {
     }
 
     @Override
-    public void detectClones() throws IOException {
+    public Set<CloneClass> detectClones() throws IOException {
         this.cloneClasses.clear();
 
         double progressIterator = 0.0;
@@ -98,31 +98,33 @@ public class TokenCloneDetection extends CloneDetection {
             if(isType1) { cc.setType(CloneClass.Type.ONE); }
         }
 
-        message.set("Constructing clone file 1...");
+//        message.set("Constructing clone file 1...");
+//
+//        finalClonesSB = new StringBuilder("data = {\n");
+//
+//        String finalClones = this.radialTreeCloneBuilder(
+//                FileController.getChosenDirectory(),
+//                finalClonesSB,
+//                this.cloneClasses
+//        );
+//
+//        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesHierarchy.js")) {
+//            out.println(finalClones);
+//        }
+//
+//        message.set("Constructing clone file 2...");
+//
+//        String arrayClones = this.arrayCloneBuilder(this.cloneClasses);
+//
+//        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesArray.js")) {
+//            out.println(arrayClones);
+//        }
+//
+//        message.set("Done!");
+//
+//        message.set("Done!");
 
-        finalClonesSB = new StringBuilder("data = {\n");
-
-        String finalClones = this.radialTreeCloneBuilder(
-                FileController.getChosenDirectory(),
-                finalClonesSB,
-                this.cloneClasses
-        );
-
-        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesHierarchy.js")) {
-            out.println(finalClones);
-        }
-
-        message.set("Constructing clone file 2...");
-
-        String arrayClones = this.arrayCloneBuilder(this.cloneClasses);
-
-        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesArray.js")) {
-            out.println(arrayClones);
-        }
-
-        message.set("Done!");
-
-        message.set("Done!");
+        return this.cloneClasses;
     }
 
 

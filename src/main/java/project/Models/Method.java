@@ -1,6 +1,7 @@
 package project.Models;
 
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.misc.Interval;
 import project.Models.Algorithms.ParseTreeCloneDetection;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -69,6 +70,17 @@ public class Method extends ParserRuleContext {
                 this.numOfParseTreeNodes++;
             }
         }
+    }
+
+    public long getLOC() {
+        int startIndex = this.getParserRuleContext().start.getStartIndex();
+        int endIndex = this.getParserRuleContext().stop.getStartIndex();
+
+        Interval interval1 = new Interval(startIndex, endIndex);
+
+        String methodContent = this.getCharStream().getText(interval1);
+
+        return methodContent.lines().count();
     }
 
     public int getNumOfParseTreeNodes() {

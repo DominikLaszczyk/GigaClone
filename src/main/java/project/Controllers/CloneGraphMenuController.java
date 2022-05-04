@@ -11,13 +11,12 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
-import project.Models.Alerts;
+import project.Models.*;
+
 import project.Models.Algorithms.ParseTreeCloneDetection;
 import project.Models.Algorithms.TextualCloneDetection;
 import project.Models.Algorithms.CloneDetection;
 import project.Models.Algorithms.TokenCloneDetection;
-import project.Models.CloneGraph;
-import project.Models.FileExtended;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -28,6 +27,8 @@ import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 import java.awt.image.BufferedImage;
+import java.util.Set;
+
 import javafx.embed.swing.SwingFXUtils;
 
 import javax.imageio.ImageIO;
@@ -70,6 +71,10 @@ public class CloneGraphMenuController implements Initializable {
     @FXML
     private CheckBox cloneType3CheckBox;
 
+    public void killDetectClonesTask() {
+        detectClonesTask.cancel();
+    }
+
     public void detectClones() {
         //get selected clone detection algorithm
         CloneDetection.Algorithm cloneDetectionAlgorithm = cloneDetectionAlgorithmComboBox.getValue();
@@ -80,31 +85,47 @@ public class CloneGraphMenuController implements Initializable {
             public Void call() throws Exception {
                 if (cloneDetectionAlgorithm == null) {
                     Alerts.getNoCloneDetectionAlgorithmSelectedAlert().showAndWait();
-                } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
-                    TextualCloneDetection textCloneDetection = new TextualCloneDetection(files);
-                    textCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
-                            updateProgress(newProgress.doubleValue(), 1));
-                    textCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
-                            updateMessage(newMessage));
-                    textCloneDetection.detectClones();
-                    textCloneDetection.calculateClonePercentage();
-                } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
-                    TokenCloneDetection tokenCloneDetection = new TokenCloneDetection(files);
-                    tokenCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
-                            updateProgress(newProgress.doubleValue(), 1));
-                    tokenCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
-                            updateMessage(newMessage));
-                    tokenCloneDetection.detectClones();
-                    tokenCloneDetection.calculateClonePercentage();
-                } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.PARSE_TREE) {
-                    ParseTreeCloneDetection parseTreeCloneDetection = new ParseTreeCloneDetection(files);
-                    parseTreeCloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
-                            updateProgress(newProgress.doubleValue(), 1));
-                    parseTreeCloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
-                            updateMessage(newMessage));
-                    parseTreeCloneDetection.detectClones();
-                    parseTreeCloneDetection.calculateClonePercentage();
                 }
+                else {
+                    CloneDetection cloneDetection = null;
+
+                    if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TEXT) {
+                        cloneDetection = new TextualCloneDetection(files);
+
+                    } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.TOKEN) {
+                        cloneDetection = new TokenCloneDetection(files);
+
+                    } else if (cloneDetectionAlgorithm == CloneDetection.Algorithm.PARSE_TREE) {
+                        cloneDetection = new ParseTreeCloneDetection(files);
+                    }
+
+                    assert cloneDetection != null;
+                    cloneDetection.progressProperty().addListener((obs, oldProgress, newProgress) ->
+                            updateProgress(newProgress.doubleValue(), 1));
+                    cloneDetection.messageProperty().addListener((obs, oldMessage, newMessage) ->
+                            updateMessage(newMessage));
+
+                    Set<CloneClass> cloneClasses = cloneDetection.detectClones();
+                    cloneDetection.calculateClonePercentage();
+                    ArrayCloneBuilder arrayCloneBuilder = new ArrayCloneBuilder(cloneClasses);
+                    HierarchyCloneBuilder hierarchyCloneBuilder = new HierarchyCloneBuilder(cloneClasses);
+
+                    cloneDetection.setMessage("Constructing clone file 1...");
+                    String arrayClones = arrayCloneBuilder.buildClones(cloneClasses);
+                    try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesArray.js")) {
+                        out.println(arrayClones);
+                    }
+
+                    cloneDetection.setMessage("Constructing clone file 2...");
+                    String hierarchyClones = hierarchyCloneBuilder.buildClones(cloneClasses);
+                    try (PrintWriter out = new PrintWriter("src/main/java/project/Data/tokenClonesHierarchy.js")) {
+                        out.println(hierarchyClones);
+                    }
+
+                    cloneDetection.setMessage("Done!");
+
+                }
+
 
                 return null;
             }

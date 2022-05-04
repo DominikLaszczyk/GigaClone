@@ -24,7 +24,7 @@ public class TextualCloneDetection extends CloneDetection {
     }
 
     @Override
-    public void detectClones() throws IOException {
+    public Set<CloneClass> detectClones() throws IOException {
         this.cloneClasses.clear();
 
         double progressIterator = 0.0;
@@ -88,29 +88,31 @@ public class TextualCloneDetection extends CloneDetection {
             if(isType1) { cc.setType(CloneClass.Type.ONE); }
         }
 
-        message.set("Constructing clone file 1...");
+//        message.set("Constructing clone file 1...");
+//
+//        finalClonesSB = new StringBuilder("data = {\n");
+//
+//        String hierarchyClones = this.radialTreeCloneBuilder(
+//            FileController.getChosenDirectory(),
+//            finalClonesSB,
+//            this.cloneClasses
+//        );
+//
+//        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/textClonesHierarchy.js")) {
+//            out.println(hierarchyClones);
+//        }
+//
+//        message.set("Constructing clone file 2...");
+//
+//        String arrayClones = this.arrayCloneBuilder(this.cloneClasses);
+//
+//        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/textClonesArray.js")) {
+//            out.println(arrayClones);
+//        }
+//
+//        message.set("Done!");
 
-        finalClonesSB = new StringBuilder("data = {\n");
-
-        String hierarchyClones = this.radialTreeCloneBuilder(
-            FileController.getChosenDirectory(),
-            finalClonesSB,
-            this.cloneClasses
-        );
-
-        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/textClonesHierarchy.js")) {
-            out.println(hierarchyClones);
-        }
-
-        message.set("Constructing clone file 2...");
-
-        String arrayClones = this.arrayCloneBuilder(this.cloneClasses);
-
-        try (PrintWriter out = new PrintWriter("src/main/java/project/Data/textClonesArray.js")) {
-            out.println(arrayClones);
-        }
-
-        message.set("Done!");
+        return this.cloneClasses;
     }
 
 

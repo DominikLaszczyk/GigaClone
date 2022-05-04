@@ -22,7 +22,7 @@ public class ParseTreeCloneDetection extends CloneDetection{
     }
 
     @Override
-    public void detectClones() throws IOException {
+    public Set<CloneClass> detectClones() throws IOException {
         this.cloneClasses.clear();
 
         Set<CloneClass> tempCloneClasses = new HashSet<>();
@@ -79,7 +79,7 @@ public class ParseTreeCloneDetection extends CloneDetection{
         }
 
 
-
+        return tempCloneClasses;
     }
 
 

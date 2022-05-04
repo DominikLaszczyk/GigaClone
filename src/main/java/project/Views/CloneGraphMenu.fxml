@@ -31,7 +31,7 @@
          <children>
             <ComboBox fx:id="cloneDetectionAlgorithmComboBox" minWidth="10.0" prefHeight="25.0" prefWidth="138.0" promptText="Clone Detection Algorithm" />
             <Button fx:id="detectClonesButton" mnemonicParsing="false" onAction="#detectClones" text="Detect Clones" />
-            <Button fx:id="killTaskButton" mnemonicParsing="false" text="Kill task" />
+            <Button fx:id="killTaskButton" mnemonicParsing="false" onAction="#killDetectClonesTask" text="Kill task" />
          </children>
       </FlowPane>
       <FlowPane alignment="CENTER" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" GridPane.rowIndex="3">
